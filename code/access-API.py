@@ -1,9 +1,18 @@
 import tweepy
+#to show tweepy logs to hep with debugging and troubleshooting
 import logging
+#to deal with json responses from the API
 import json
+#to save in csv format
 import csv
+#to display the data collected
 import pandas
+#wait times between requests
 import time
+#make dates in readable format
+import datetime
+import dateutil.parser
+import unicodedata
 
 print("hello")
 
@@ -25,7 +34,7 @@ keys['access_token_secret'])
 api = tweepy.API(auth)
 
 #Enable logging to the console
-logging.basicConfig(level=logging.DEBUG)
+#logging.basicConfig(level=logging.DEBUG)
 
 #Stream by language and keywords: the keywords are 10 of the most commonly used words on twitter so as to replicate live tweet collection without filter
 keywords = ['the', 'i', 'to', 'a', 'and', 'is', 'in', 'it', 'you', 'new']
@@ -36,7 +45,7 @@ class CollectTweets(tweepy.StreamingClient):
         print('connected')
     
     def on_tweet(self, tweet):
-        if tweet.referenced_tweets == None and tweet.lang == "en":
+        if tweet.referenced_tweets == None:
             print(tweet.text) #this checks to see whether or not a tweet is a reply or not in english and discards it if it is
             
             time.sleep(0.5)
@@ -48,4 +57,13 @@ for word in keywords:
     stream.add_rules(tweepy.StreamRule(word)) #Adds all the keywords as rules in the stream search, meaning that the tweets searched for must have one of the keywords
 
 #Now actually stream and filter the tweets
-stream.filter(tweet_fields=["referenced_tweets", "lang"])
+streamData = stream.filter(tweet_fields=["referenced_tweets"])
+
+columns = ['Tweet ID', 'Date', 'User', 'Text']
+data = []
+for tweet in streamData:
+    data.append([tweet.id, tweet.created_at, tweet.user.screen_name, tweet.text])
+
+dataframe = pandas.DataFrame(data, columns = columns)
+
+print(dataframe)
