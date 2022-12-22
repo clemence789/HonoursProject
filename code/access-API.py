@@ -59,6 +59,8 @@ tweets_data = tweets_dataset['data']
 
 df = pandas.json_normalize(tweets_data)
 
+return_type = dict
+
 #print(df)
 
 #columns = ['Tweet ID', 'Date', 'User', 'Text']
