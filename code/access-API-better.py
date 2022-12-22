@@ -1,6 +1,4 @@
 import tweepy
-import logging
-import json
 import csv
 import pandas
 import time
@@ -20,13 +18,43 @@ keys = {
 }
 
 #Access to API using OAuth
-client = tweepy.Client(bearer_token = keys['bearer_token'], wait_on_rate_limit = True)
+client = tweepy.Client(bearer_token = keys['bearer_token'], wait_on_rate_limit = True, return_type=dict)
 
 tweets = client.search_recent_tweets(
-    "happy OR upset OR i -is:retweet lang:en",
+    "happy OR upset OR angry OR fun OR disgusted OR best -is:retweet lang:en",
     max_results = 10,
-    tweet_fields = [],
-    user_fields = []
-)
-print(tweets)
+    tweet_fields = ['id','created_at','text'],
+    user_fields = ['username'])
 
+tweets_data = tweets['data']
+
+df = pandas.DataFrame.from_dict(tweets_data)
+
+df.to_csv(r'C:\Users\cleme\Documents\1HonoursProject\code\dataset.csv', index = True, header = True)
+print(df)
+
+#print(tweets)
+#print(tweets['data'])
+
+#json_data = [r._json for r in tweets]
+#df = pandas.json_normalize(tweets)
+
+#print(df)
+
+#tweets_df = pandas.DataFrame(tweets[i] for i in range(len(tweets)))
+
+#FILE_PATH = r"C:\Users\cleme\Documents\1HonoursProject\code\dataset.csv"
+
+#tweets_df.to_csv(FILE_PATH)
+
+#columns = ['Tweet ID', 'Date', 'User', 'Text']
+#dataframe = pandas.DataFrame(tweets)
+
+#print(dataframe)
+#print(tweets)
+
+#tweets_data = tweets_dataset['data']
+
+#df = pandas.json_normalize(tweets_data)
+
+#print(df)
