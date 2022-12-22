@@ -1,22 +1,16 @@
 import tweepy
-#to show tweepy logs to hep with debugging and troubleshooting
 import logging
-#to deal with json responses from the API
 import json
-#to save in csv format
 import csv
-#to display the data collected
 import pandas
-#wait times between requests
 import time
-#make dates in readable format
 import datetime
 import dateutil.parser
 import unicodedata
 
 print("hello")
 
-#Authenticate with the API through tweepy (à voir)
+#Authenticate with the API through tweepy
 keys = {
     'consumer_key': 'HM2L20WSoeiDOGuBpWMBhO35Y', 
     'consumer_secret': 'lQF726OQxRqvFoGfUFEBgPSrV4vH8phzRhrmMt2WbHfuVfX4c4', 
@@ -26,10 +20,8 @@ keys = {
 }
 
 #Access to API using OAuth
-auth = tweepy.OAuthHandler(keys['consumer_key'],
-keys['consumer_secret'])
-auth.set_access_token(keys['access_token'],
-keys['access_token_secret'])
+auth = tweepy.OAuthHandler(keys['consumer_key'], keys['consumer_secret'])
+auth.set_access_token(keys['access_token'], keys['access_token_secret'])
 
 api = tweepy.API(auth)
 
@@ -46,24 +38,34 @@ class CollectTweets(tweepy.StreamingClient):
     
     def on_tweet(self, tweet):
         if tweet.referenced_tweets == None:
-            print(tweet.text) #this checks to see whether or not a tweet is a reply or not in english and discards it if it is
-            
-            time.sleep(0.5)
+            print(tweet.text) #this checks to see whether or not a tweet is a reply or not and discards it if it is
+
+        time.sleep(0.5)
 
 
-stream = CollectTweets(keys['bearer_token']) #Create instance of the class
+stream = CollectTweets(keys['bearer_token'], wait_on_rate_limit = True) #Create instance of the class
 
 for word in keywords:
     stream.add_rules(tweepy.StreamRule(word)) #Adds all the keywords as rules in the stream search, meaning that the tweets searched for must have one of the keywords
 
+stream.add_rules(tweepy.StreamRule('lang: en'))#Adds rule to only collect english tweets
+
 #Now actually stream and filter the tweets
 streamData = stream.filter(tweet_fields=["referenced_tweets"])
 
-columns = ['Tweet ID', 'Date', 'User', 'Text']
-data = []
-for tweet in streamData:
-    data.append([tweet.id, tweet.created_at, tweet.user.screen_name, tweet.text])
+tweets_dataset = streamData.json()
 
-dataframe = pandas.DataFrame(data, columns = columns)
+tweets_data = tweets_dataset['data']
 
-print(dataframe)
+df = pandas.json_normalize(tweets_data)
+
+#print(df)
+
+#columns = ['Tweet ID', 'Date', 'User', 'Text']
+#data = []
+#for tweet in streamData:
+#    data.append([tweet.id, tweet.created_at, tweet.user.screen_name, tweet.text])
+
+#dataframe = pandas.DataFrame(data, columns = columns)
+
+#print(dataframe)
