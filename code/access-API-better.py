@@ -51,4 +51,3 @@ while iteration < 4:
         writer.writerows(data)
 
         iteration+=1
-
