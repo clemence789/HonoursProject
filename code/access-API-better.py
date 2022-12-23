@@ -17,35 +17,38 @@ keys = {
 client = tweepy.Client(bearer_token = keys['bearer_token'], wait_on_rate_limit = True)
 
 max_results = 100
-tweets = client.search_recent_tweets(
-    "shappy OR upset OR angry OR fun OR disgusted OR best OR the -is:retweet lang:en",
-    max_results = max_results,
-    expansions=['author_id'],
-    tweet_fields = ['id','created_at','text', 'lang'],
-    user_fields = ['username']
-    )
+iteration = 0
+while iteration < 4:
+    tweets = client.search_recent_tweets(
+        "happy OR upset OR angry OR fun OR disgusted OR best OR the -is:retweet lang:en",
+        max_results = max_results,
+        expansions=['author_id'],
+        tweet_fields = ['id','created_at','text', 'lang'],
+        user_fields = ['username']
+        )
 
-header = ['ID', 'Creation', 'Username', 'Text']
-data = []
-time_format = "%A %B %d %H:%M:%S %Y"
-for i in tweets.data:
-    in_tweet = []
-    in_tweet.append(str(i.id))
-    times = times = datetime.strftime(i.created_at, time_format)
-    in_tweet.append(str(times))
-    in_tweet.append(str(i.text))
-    data.append(in_tweet)
+    data = []
+    time_format = "%A %B %d %H:%M:%S %Y"
+    for i in tweets.data:
+        in_tweet = []
+        in_tweet.append(str(i.id))
+        times = times = datetime.strftime(i.created_at, time_format)
+        in_tweet.append(str(times))
+        in_tweet.append(str(i.text))
+        data.append(in_tweet)
 
-i = 0
-while i < len(tweets.data)-1:
-    data[i].insert(2, str(tweets.includes['users'][i]))
-    i+=1
+    print(len(tweets.data))
 
-#write to csv
-with open(r'C:\Users\cleme\Documents\1HonoursProject\code\dataset.csv', 'w', encoding='utf-8', newline='') as f:
-    writer = csv.writer(f)
-    #header
-    writer.writerow(header)
-    #rows
-    writer.writerows(data)
+    i = 0
+    while i < len(tweets.data)-1:
+        data[i].insert(2, str(tweets.includes['users'][i]))
+        i+=1
+
+    #write to csv
+    with open(r'C:\Users\cleme\Documents\1HonoursProject\code\dataset.csv', 'a', encoding='utf-8', newline='') as f:
+        writer = csv.writer(f)
+        #rows
+        writer.writerows(data)
+
+        iteration+=1
 
