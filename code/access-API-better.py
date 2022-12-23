@@ -2,7 +2,7 @@ import tweepy
 import csv
 import pandas
 import time
-import datetime
+from datetime import datetime
 import dateutil.parser
 import unicodedata
 
@@ -18,20 +18,31 @@ keys = {
 }
 
 #Access to API using OAuth
-client = tweepy.Client(bearer_token = keys['bearer_token'], wait_on_rate_limit = True, return_type=dict)
+client = tweepy.Client(bearer_token = keys['bearer_token'], wait_on_rate_limit = True)
 
+max_results = 10
 tweets = client.search_recent_tweets(
-    "happy OR upset OR angry OR fun OR disgusted OR best OR the -is:retweet lang:en",
-    max_results = 10,
-    tweet_fields = ['id','created_at','text'],
-    user_fields = ['username'])
+    "shappy OR upset OR angry OR fun OR disgusted OR best -is:retweet lang:en",
+    max_results = max_results,
+    expansions=['author_id'],
+    tweet_fields = ['id','created_at','text', 'lang'],
+    user_fields = ['username']
+    )
 
-tweets_data = tweets['data']
-print(tweets_data[0])
+header = ['ID', 'Creation', 'Username', 'Text']
+data = []
+time_format = "%A %B %d %H:%M:%S %Y"
+for i in tweets.data:
+    in_tweet = []
+    in_tweet.append(i.id)
+    times = times = datetime.strftime(i.created_at, time_format)
+    in_tweet.append(times)
+    in_tweet.append(i.text)
+    data.append(in_tweet)
 
-#'id','created_at','text','username'
+i = 0
+while i < len(tweets.data):
+    data[i].insert(2, str(tweets.includes['users'][i]))
+    i+=1
 
-#df = pandas.DataFrame.from_dict(tweets_data)
-
-#df.to_csv(r'C:\Users\cleme\Documents\1HonoursProject\code\dataset.csv', index = True, header = True)
-#print(df)
+print(data)
