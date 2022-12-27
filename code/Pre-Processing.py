@@ -1,10 +1,41 @@
-import csv
 import pandas as pd
+import emoji
 
-df = pd.read_csv(r'C:\Users\cleme\Documents\1HonoursProject\code\dataset.csv')
+df = pd.read_csv(r'code\dataset.csv', encoding='utf-8')
+df.columns = ['ID', 'Date', 'Username', 'Text']
 
-#Put individual tweets on the same rows in csv
-df=df.applymap(lambda x: x.encode('unicode_escape').\
-    decode('utf-8') if isinstance(x, str) else x)
+#replace emojis in text if the text value is not NaN
+def emoji_to_text(text):
+    if type(text) != float:
+        return emoji.demojize(text)
+    else:
+        return text
+df['Text'] = df['Text'].apply(emoji_to_text)
+print("Replaced emojis")
+#df.to_csv(r'code\dataset2.csv')
 
-df.to_csv(r'C:\Users\cleme\Documents\1HonoursProject\code\dataset.csv')
+#remove URLs
+df = df.apply(lambda x: x.replace({r'http\S+': ''}, regex=True))
+(print('Removed URLs'))
+
+#Remove punctuation
+text_col = df['Text']
+text_col = text_col.str.replace(r'[^\w\s]+', ' ', regex=True)
+text_col = text_col.str.replace('_', ' ')
+text_col = text_col.str.replace('\n', '', regex=True)
+text_col = text_col.str.replace(r'[^\u0000-\u05C0\u2100-\u214F]+', '', regex=True)
+text_col = text_col.str.replace('  ', ' ', regex=True)
+print('Removed punctuation')
+
+#Remove numbers
+df['Text'] = df['Text'].str.replace('\d+', '', regex=True)
+print('Removed numbers')
+
+#Remove duplicate letters
+df['Text'] = df['Text'].str.replace(r'(\w)\1{2,}', r'\1', regex=True)
+print('Removed duplicate letters')
+
+#Expand Acronyms
+
+#Write the changes to csv file
+df.to_csv(r'code\dataset1.csv')
