@@ -19,12 +19,12 @@ df = df.apply(lambda x: x.replace({r'http\S+': ''}, regex=True))
 (print('Removed URLs'))
 
 #Remove punctuation
-text_col = df['Text']
-text_col = text_col.str.replace(r'[^\w\s]+', ' ', regex=True)
-text_col = text_col.str.replace('_', ' ')
-text_col = text_col.str.replace('\n', '', regex=True)
-text_col = text_col.str.replace(r'[^\u0000-\u05C0\u2100-\u214F]+', '', regex=True)
-text_col = text_col.str.replace('  ', ' ', regex=True)
+
+df['Text'] = df['Text'].str.replace(r'[^\w\s]+', ' ', regex=True)
+df['Text'] = df['Text'].str.replace('_', ' ')
+df['Text'] = df['Text'].str.replace(r'\n', '', regex=True)
+df['Text'] = df['Text'].str.replace(r'[^\u0000-\u05C0\u2100-\u214F]+', '', regex=True)
+df['Text'] = df['Text'].str.replace('  ', ' ', regex=True)
 print('Removed punctuation')
 
 #Remove numbers
