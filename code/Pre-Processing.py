@@ -3,6 +3,7 @@ import emoji
 import acronymDict as ad
 import re
 import contractions
+import stopwords as sw
 
 df = pd.read_csv(r'code\dataset.csv', encoding='utf-8')
 df.columns = ['ID', 'Date', 'Username', 'Text']
@@ -33,6 +34,12 @@ df['Text'] = df['Text'].str.replace("’", "'") #replace instances of different 
 def expand_contractions(text):
     return(re.sub(r"\b(\w+('\w+))\b", lambda x: contractions.CONTRACTIONS.get(x.group(1), x.group(1)), text)) #change regex from expanding acronyms to handle apostrophe
 df['Text'] = df['Text'].apply(expand_contractions)
+
+#remove stopwords
+def remove_stopwords(tweet):
+    return(re.sub(r"\b(\w+)\b", lambda x: sw.STOPWORDS.get(x.group(1), x.group(1)), tweet))
+df['Text'] = df['Text'].apply(remove_stopwords)
+print('Removed Stopwords')
 
 #Remove punctuation
 df['Text'] = df['Text'].str.replace(r'[^\w\s]+', ' ', regex=True)
