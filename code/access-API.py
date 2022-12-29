@@ -19,7 +19,7 @@ client = tweepy.Client(bearer_token = keys['bearer_token'], wait_on_rate_limit =
 
 max_results = 100
 iteration = 0
-while iteration < 4:
+while iteration < 3:
     tweets = client.search_recent_tweets(
         "happy OR upset OR angry OR fun OR disgusted OR best OR the -is:retweet lang:en",
         max_results = max_results, #max results received, has to be number between 10 and 100
