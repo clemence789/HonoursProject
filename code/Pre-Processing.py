@@ -2,8 +2,7 @@ import pandas as pd
 import emoji
 import acronymDict as ad
 import re
-import contractions
-import stopwords as sw
+import dictionaries
 
 df = pd.read_csv(r'code\dataset.csv', encoding='utf-8')
 df.columns = ['ID', 'Date', 'Username', 'Text']
@@ -32,12 +31,12 @@ print('Turned text to lowercase')
 #expand contractions
 df['Text'] = df['Text'].str.replace("’", "'") #replace instances of different apostrophe so they are recognized by the contraction dictionary
 def expand_contractions(text):
-    return(re.sub(r"\b(\w+('\w+))\b", lambda x: contractions.CONTRACTIONS.get(x.group(1), x.group(1)), text)) #change regex from expanding acronyms to handle apostrophe
+    return(re.sub(r"\b(\w+('\w+))\b", lambda x: dictionaries.CONTRACTIONS.get(x.group(1), x.group(1)), text)) #change regex from expanding acronyms to handle apostrophe
 df['Text'] = df['Text'].apply(expand_contractions)
 
 #remove stopwords
 def remove_stopwords(tweet):
-    return(re.sub(r"\b(\w+)\b", lambda x: sw.STOPWORDS.get(x.group(1), x.group(1)), tweet))
+    return(re.sub(r"\b(\w+)\b", lambda x: dictionaries.STOPWORDS.get(x.group(1), x.group(1)), tweet))
 df['Text'] = df['Text'].apply(remove_stopwords)
 print('Removed Stopwords')
 
