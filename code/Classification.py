@@ -1,32 +1,42 @@
 #Hutto, C.J. & Gilbert, E.E. (2014). VADER: A Parsimonious Rule-based Model for Sentiment Analysis of Social Media Text. Eighth International Conference on Weblogs and Social Media (ICWSM-14). Ann Arbor, MI, June 2014.
-
 from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
 import pandas as pd
-from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
+from nltk.sentiment.vader import SentimentIntensityAnalyzer, SentiText, VaderConstants
+import csv
 
 df = pd.read_csv(r'code\dataset1.csv', encoding='utf-8')
 
-vectoriser = TfidfVectorizer(stop_words = 'english', analyzer='word',ngram_range=(1,2))
-vectorised_values = vectoriser.fit_transform(df['Text'])
+# modified code from https://www.geeksforgeeks.org/python-sentiment-analysis-using-vader/
+def sentiment_scores(sentence):
+    sentiment = ""
+    sentiment_analyser = SentimentIntensityAnalyzer()
+    sentiment_dict = sentiment_analyser.polarity_scores(sentence)
+    if sentiment_dict['compound'] < -0.50 :
+        sentiment = '1'
+    elif sentiment_dict['compound'] <= -0.05 :
+        sentiment = '2'
+    elif sentiment_dict['compound'] <= 0.05:
+        sentiment = '3'
+    elif sentiment_dict['compound'] <= 0.5:
+        sentiment = '4'
+    else:
+        sentiment = '5'
+    return sentiment
 
-print(vectorised_values)
+sentence = "I hate everyone and you are so evil and i want to kill and maim and slay"
+df['Classification'] = df['Text'].apply(sentiment_scores)
 
-def sentence_score(sentence):
-    sid_obj = SentimentIntensityAnalyzer()
-    sentiment_dict = sid_obj.polarity_scores(sentence)
-    print("Overall sentiment dictionary is : ", sentiment_dict)
-    print("sentence was rated as ", sentiment_dict['neg']*100, "% Negative")
-    print("sentence was rated as ", sentiment_dict['neu']*100, "% Neutral")
-    print("sentence was rated as ", sentiment_dict['pos']*100, "% Positive")
-    print("Sentence Overall Rated As", end = " ")
-    # decide sentiment as positive, negative and neutral
-    if sentiment_dict['compound'] >= 0.05 :
-        print("Positive")
-    elif sentiment_dict['compound'] <= - 0.05 :
-        print("Negative")
-    else :
-        print("Neutral")
+#Shift classification column to the front
+df = df[['Classification'] + [col for col in df.columns if col != 'Classification']]
 
-sentence_score("I'm so happy today things are great and amazing hell yeah")
+#delete extra column created by appending classification to the dataframe
+df = df.drop(df.columns[1], axis=1)
 
-print(SentimentIntensityAnalyzer.make_lex_dict())
+#Write the changes to csv file
+df.to_csv(r'code\dataset1.csv')
+
+#1 extremely negative
+#2 negative
+#3 neutral
+#4 positive
+#5 extremely positive
