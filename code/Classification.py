@@ -1,8 +1,6 @@
 #Hutto, C.J. & Gilbert, E.E. (2014). VADER: A Parsimonious Rule-based Model for Sentiment Analysis of Social Media Text. Eighth International Conference on Weblogs and Social Media (ICWSM-14). Ann Arbor, MI, June 2014.
-from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
 import pandas as pd
-from nltk.sentiment.vader import SentimentIntensityAnalyzer, SentiText, VaderConstants
-import csv
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
 df = pd.read_csv(r'code\dataset1.csv', encoding='utf-8')
 
