@@ -1,6 +1,5 @@
 import pandas as pd
 import emoji
-import acronymDict as ad
 import re
 import dictionaries
 
@@ -58,10 +57,11 @@ print('Removed duplicate letters')
 
 #Expand Acronyms using acronym dictionary
 def acronym_to_word(text):
-    return(re.sub(r"\b(\w+)\b", lambda x: ad.ACRONYM_TRANSLATE.get(x.group(1), x.group(1)), text))
+    return(re.sub(r"\b(\w+)\b", lambda x: dictionaries.ACRONYM_TRANSLATE.get(x.group(1), x.group(1)), text))
 
 df['Text'] = df['Text'].apply(acronym_to_word)
 print('Replaced acronyms with their meaning')
 
+df['Text'] = df['Text'].str.replace('  ', ' ', regex=True)
 #Write the changes to csv file
 df.to_csv(r'code\dataset1.csv')
