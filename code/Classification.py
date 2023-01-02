@@ -22,13 +22,15 @@ def sentiment_scores(sentence):
     return sentiment
 
 sentence = "I hate everyone and you are so evil and i want to kill and maim and slay"
-df['Classification'] = df['Text'].apply(sentiment_scores)
+df['Score'] = df['Text'].apply(sentiment_scores)
 
 #Shift classification column to the front
-df = df[['Classification'] + [col for col in df.columns if col != 'Classification']]
+df = df[['Score'] + [col for col in df.columns if col != 'Classification']]
 
 #delete extra column created by appending classification to the dataframe
 df = df.drop(df.columns[1], axis=1)
+
+print("Added classification to every tweet")
 
 #Write the changes to csv file
 df.to_csv(r'code\dataset1.csv')
