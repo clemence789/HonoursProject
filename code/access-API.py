@@ -19,9 +19,9 @@ client = tweepy.Client(bearer_token = keys['bearer_token'], wait_on_rate_limit =
 
 max_results = 100
 iteration = 0
-while iteration < 3:
+while iteration < 10:
     tweets = client.search_recent_tweets(
-        "happy OR upset OR angry OR fun OR disgusted OR best OR the -is:retweet lang:en",
+        "upset OR angry OR disgusted OR worst OR hate OR detest -is:retweet lang:en",
         max_results = max_results, #max results received, has to be number between 10 and 100
         expansions=['author_id'], #expansions allows to get the username in 'user_fields'
         tweet_fields = ['id','created_at','text', 'lang'],
@@ -37,11 +37,22 @@ while iteration < 3:
         in_tweet.append(str(times))
         in_tweet.append(str(i.text))
         data.append(in_tweet)
+    
+    len1 = len(tweets.data)
+    len2 = len(tweets.includes['users'])
 
-    print(len(tweets.data))
+    #Equalize the number of tweets and users collected
+    if len1 != len2:
+        difference = len1 - len2
+        j = 0
+        while j < difference:
+            tweets.includes['users'].append('')
+            j+=1
+    
+    print('Tweets collected: ' + str(len(tweets.data)))
 
     i = 0
-    while i < len(tweets.data)-1:
+    while i < len(tweets.data):
         data[i].insert(2, str(tweets.includes['users'][i]))
         i+=1
 
