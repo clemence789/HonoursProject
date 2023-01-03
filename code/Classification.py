@@ -34,9 +34,3 @@ print("Added classification to every tweet")
 
 #Write the changes to csv file
 df.to_csv(r'code\dataset1.csv')
-
-#1 extremely negative
-#2 negative
-#3 neutral
-#4 positive
-#5 extremely positive
