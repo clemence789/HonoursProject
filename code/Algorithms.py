@@ -2,8 +2,9 @@ import pandas as pd
 from sklearn.model_selection import train_test_split as tts
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.naive_bayes import MultinomialNB
+from sklearn.linear_model import LogisticRegression
+from sklearn.svm import SVC
 from sklearn import metrics
-import numpy as np
 
 df = pd.read_csv(r'code\dataset1.csv', encoding='utf-8')
 
@@ -19,16 +20,53 @@ x_train, x_test, y_train, y_test = tts(x, y, test_size = 0.2, random_state = 0)
 
 #Use TFIDF to vectorize tweets
 vectoriser = TfidfVectorizer(stop_words = 'english', analyzer='word')
+#On the training set
 x_train_tfidf = vectoriser.fit_transform(x_train)
+
+#On the test set
 x_test_tfidf = vectoriser.transform(x_test)
 
-model = MultinomialNB()
-model.fit(x_train_tfidf, y_train)
+#Use multinomial Naïve Bayes to classify test set
+nb = MultinomialNB()
+nb.fit(x_train_tfidf, y_train)
 
-model.score(x_test_tfidf, y_test)
+nb.score(x_test_tfidf, y_test)
 
-y_pred = model.predict(x_test_tfidf)
+y_pred = nb.predict(x_test_tfidf)
 
-score1 = metrics.accuracy_score(y_test, y_pred)
+#Find accuracy
+score_nb = metrics.accuracy_score(y_test, y_pred)
 
-print(score1)
+print(metrics.classification_report(y_test, y_pred, target_names = ['1', '2', '3', '4', '5']))
+print(metrics.confusion_matrix(y_test, y_pred))
+print(score_nb)
+
+#Logistic regression
+lr = LogisticRegression()
+lr.fit(x_train_tfidf, y_train)
+
+lr.score(x_test_tfidf, y_test)
+
+y_pred = lr.predict(x_test_tfidf)
+
+score_lr = metrics.accuracy_score(y_test, y_pred)
+
+print(metrics.classification_report(y_test, y_pred, target_names = ['1', '2', '3', '4', '5']))
+print(metrics.confusion_matrix(y_test, y_pred))
+print(score_lr)
+
+#SVM
+svm = SVC(kernel = 'linear')
+svm.fit(x_train_tfidf, y_train)
+
+svm.score(x_test_tfidf, y_test)
+
+y_pred = svm.predict(x_test_tfidf)
+
+score_svm = metrics.accuracy_score(y_test, y_pred)
+
+print(metrics.classification_report(y_test, y_pred, target_names = ['1', '2', '3', '4', '5']))
+print(metrics.confusion_matrix(y_test, y_pred))
+print(score_svm)
+
+
