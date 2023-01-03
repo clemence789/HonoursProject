@@ -21,7 +21,6 @@ def sentiment_scores(sentence):
         sentiment = '5'
     return sentiment
 
-sentence = "I hate everyone and you are so evil and i want to kill and maim and slay"
 df['Score'] = df['Text'].apply(sentiment_scores)
 
 #Shift classification column to the front
