@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8" />
+    <script src='jquery-3.4.1.min.js'></script>
+    <title>Twitter Sentiment Classifier</title>
+  </head>
+  <body>
+    <p>Please give information on the tweets you would like to analyse</p>
+    <form action="" method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <input type="submit" value="Submit">
+    </form>
+  
+  </body>
+</html>
