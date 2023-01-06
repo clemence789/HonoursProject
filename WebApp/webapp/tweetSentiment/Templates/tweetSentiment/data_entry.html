@@ -1,15 +1,40 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en-US">
   <head>
     <meta charset="utf-8" />
-    <script src='jquery-3.4.1.min.js'></script>
+    <script src="{% static 'script.js' %}" src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <title>Twitter Sentiment Classifier</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
   </head>
   <body>
     <p>Please give information on the tweets you would like to analyse</p>
     <form action="" method="post">
       {% csrf_token %}
-      {{ form.as_p }}
+
+      {{ form.bearerToken.label_tag }}
+      {{ form.bearerToken }}
+      
+        <legend>Select filter type:</legend>
+    
+        <div>
+          <input type="radio" id="username" name="selection" value="username" onclick="filterSelection()">
+          <label for="username">User</label>
+        </div>
+    
+        <div>
+          <input type="radio" id="keyword" name="selection" value="keyword" onclick="filterSelection()">
+          <label for="keyword">Keyword(s)</label>
+        </div>
+
+      <div id="username_div" style="visibility:hidden">
+      {{ form.username.label_tag }}
+      {{ form.username }}</div>
+      
+      <div id="keyword_div" style="visibility:hidden">
+      {{ form.keywords.label_tag }}
+      {{ form.keywords }}</div>
+
       <input type="submit" value="Submit">
     </form>
   
