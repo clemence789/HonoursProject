@@ -4,17 +4,56 @@ import pandas as pd
 import emoji
 import re
 from tweetSentiment import dictionaries
+from .models import RequestedData
 
-def collectTweets(bearer_token, keywords):
+#Collect tweets from keyword
+def collectTweetsKeywords(bearer_token, keywords):
     keywords = str(keywords + ' -is:retweet lang:en')
     client = tweepy.Client(bearer_token = bearer_token, wait_on_rate_limit = True)
 
-    max_results = 100
+    max_results = 10
     iteration = 0
-    while iteration < 4:
+    while iteration < 1:
         tweets = client.search_recent_tweets(
             keywords,
             max_results = max_results, #max results received, has to be number between 10 and 100
+            tweet_fields = ['text']
+            )
+
+        data = []
+        for i in tweets.data:
+            in_tweet = []
+            in_tweet.append(str(i.text))
+            data.append(in_tweet)
+                
+        print('Tweets collected: ' + str(len(tweets.data)))
+
+        #db_tweet = Tweet(user=db_user, date=tweet.created_at, tweet_text=tweet.text)
+        #db_tweet.save()
+
+        #write to csv
+        with open(r'tweetSentiment\user_dataset.csv', 'a', encoding='utf-8', newline='') as f:
+            writer = csv.writer(f)
+            #rows
+            writer.writerows(data)
+        iteration+=1
+
+#Collect tweets from username
+def collectTweetsUsername(bearer_token, username):
+    user = str(username)
+    client = tweepy.Client(bearer_token = bearer_token, wait_on_rate_limit = True)
+    
+    #get user id based on username
+    user = client.get_user(username = user)
+    username = user.data['id']
+
+    #returns dictionary so need to extract user id from it
+    max_results = 10
+    iteration = 0
+    while iteration < 1:
+        tweets = client.get_users_tweets(
+            username,
+            max_results = max_results,
             tweet_fields = ['text']
             )
 
@@ -33,6 +72,7 @@ def collectTweets(bearer_token, keywords):
             writer.writerows(data)
         iteration+=1
 
+#pre-process tweets
 def cleanTweets():
     df = pd.read_csv(r'tweetSentiment\user_dataset.csv', encoding='utf-8')
     df.columns = ['Text']
