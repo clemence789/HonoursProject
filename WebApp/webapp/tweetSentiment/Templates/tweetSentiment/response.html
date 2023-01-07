@@ -1,0 +1,17 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8" />
+    <script src="{% static 'script.js' %}" src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <title>Twitter Sentiment Classifier</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+  </head>
+  <body>
+    <p>Response</p>
+    {% for tweet in query_results %}
+        <li>{{ tweet.tweet_text }}</li>
+        <li></li>
+    {% endfor %}
+  </body>
+</html>
