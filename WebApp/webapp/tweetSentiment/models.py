@@ -4,4 +4,5 @@ from django.db import models
 class RequestedData(models.Model):
     tweet_text = models.CharField(max_length = 500)
     tweet_sentiment = models.CharField(max_length = 1)
+    request_number = models.IntegerField()
 
