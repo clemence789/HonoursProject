@@ -4,7 +4,6 @@ import pandas as pd
 import emoji
 import re
 from tweetSentiment import dictionaries
-from .models import RequestedData
 
 #Collect tweets from keyword
 def collectTweetsKeywords(bearer_token, keywords):
@@ -63,8 +62,6 @@ def collectTweetsUsername(bearer_token, username):
 
 #pre-process tweets
 def cleanTweets(tweets):
-    #df = pd.read_csv(r'tweetSentiment\user_dataset.csv', encoding='utf-8')
-    #df.columns = ['Text']
 
     cleanTweets = []
     for i in tweets:
@@ -116,5 +113,4 @@ def cleanTweets(tweets):
         i = re.sub('  ', ' ', i)
         cleanTweets.append(i)
     
-    print(cleanTweets)
     return(cleanTweets)
