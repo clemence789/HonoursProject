@@ -4,35 +4,47 @@ from tweetSentiment.forms import DataEntryForm
 from tweetSentiment import preprocessing
 from .models import RequestedData
 
+
 def index(request):
     return HttpResponse("You're at the sentiment analysis index.")
 
 
 
 def entry(request):
+    
     #handling if the request is GET, show user blank form, if request is POST check data is valid
     if request.method == 'POST':
         form = DataEntryForm(request.POST)
 
         if form.is_valid():
+            last_object = RequestedData.objects.last()
+            request_number = last_object.request_number + 1
+
             bearer_token = form.cleaned_data['bearerToken']
             keywords = form.cleaned_data['keywords']
             username = form.cleaned_data['username']
-            if keywords is not '':
-                preprocessing.collectTweetsKeywords(bearer_token, keywords)
-                preprocessing.cleanTweets()
-            elif username is not '':
-                preprocessing.collectTweetsUsername(bearer_token, username)
-                preprocessing.cleanTweets()
+            if keywords != '':
+                tweets = preprocessing.collectTweetsKeywords(bearer_token, keywords)
+                cleanTweets = preprocessing.cleanTweets(tweets)
             
-            return redirect('results')
+            elif username != '':
+                tweets = preprocessing.collectTweetsUsername(bearer_token, username)
+                cleanTweets = preprocessing.cleanTweets(tweets)
 
+            for i in range(len(cleanTweets)):
+                RequestedData.objects.create(tweet_text = cleanTweets[i], request_number = request_number)
+            return redirect('results')
+    
     else:
         form = DataEntryForm()
+
     return render(request, 'tweetSentiment/data_entry.html', {'form': form})
 
 
 
 def results(request):
-    response = "You're looking at the request response"
-    return HttpResponse(response)
+    last_object = RequestedData.objects.last()
+    number = last_object.request_number
+    query_results = RequestedData.objects.filter(request_number = number)
+    context = {'query_results': query_results}
+    return render(request, 'tweetSentiment/response.html', context)
