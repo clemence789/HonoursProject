@@ -8,4 +8,3 @@ function filterSelection(){
     document.getElementById('keyword_div').style.visibility = 'visible';
   }
 }
-
