@@ -19,24 +19,17 @@ def collectTweetsKeywords(bearer_token, keywords):
             max_results = max_results, #max results received, has to be number between 10 and 100
             tweet_fields = ['text']
             )
-
+        
         data = []
         for i in tweets.data:
             in_tweet = []
             in_tweet.append(str(i.text))
             data.append(in_tweet)
-                
+        iteration+=1       
         print('Tweets collected: ' + str(len(tweets.data)))
 
-        #db_tweet = Tweet(user=db_user, date=tweet.created_at, tweet_text=tweet.text)
-        #db_tweet.save()
-
-        #write to csv
-        with open(r'tweetSentiment\user_dataset.csv', 'a', encoding='utf-8', newline='') as f:
-            writer = csv.writer(f)
-            #rows
-            writer.writerows(data)
-        iteration+=1
+    return(data)
+        
 
 #Collect tweets from username
 def collectTweetsUsername(bearer_token, username):
@@ -62,78 +55,66 @@ def collectTweetsUsername(bearer_token, username):
             in_tweet = []
             in_tweet.append(str(i.text))
             data.append(in_tweet)
-                
+        iteration +=1       
         print('Tweets collected: ' + str(len(tweets.data)))
+    
+    return(data)
 
-        #write to csv
-        with open(r'tweetSentiment\user_dataset.csv', 'a', encoding='utf-8', newline='') as f:
-            writer = csv.writer(f)
-            #rows
-            writer.writerows(data)
-        iteration+=1
 
 #pre-process tweets
-def cleanTweets():
-    df = pd.read_csv(r'tweetSentiment\user_dataset.csv', encoding='utf-8')
-    df.columns = ['Text']
+def cleanTweets(tweets):
+    #df = pd.read_csv(r'tweetSentiment\user_dataset.csv', encoding='utf-8')
+    #df.columns = ['Text']
 
-    #Remove rows with empty values
-    df = df.dropna(axis=0)
+    cleanTweets = []
+    for i in tweets:
+        #replace emojis in text if the text value is not NaN
+        def emoji_to_text(text):
+            if type(text) != float:
+                return emoji.demojize(text)
+            else:
+                return text
+        
+        i = emoji_to_text(i)
 
-    #replace emojis in text if the text value is not NaN
-    def emoji_to_text(text):
-        if type(text) != float:
-            return emoji.demojize(text)
-        else:
-            return text
+        #remove URLs
+        i = re.sub(r'http\S+', '', i)
+
+        #turn all text to lower case
+        i = i.lower()
+
+        #expand contractions
+        i = i.replace("’", "'") #replace instances of different apostrophe so they are recognized by the contraction dictionary
+        def expand_contractions(text):
+            return(re.sub(r"\b(\w+('\w+))\b", lambda x: dictionaries.CONTRACTIONS.get(x.group(1), x.group(1)), text)) #change regex from expanding acronyms to handle apostrophe
+        i = expand_contractions(i)
+
+        #remove stopwords
+        def remove_stopwords(tweet):
+            return(re.sub(r"\b(\w+)\b", lambda x: dictionaries.STOPWORDS.get(x.group(1), x.group(1)), tweet))
+        i = remove_stopwords(i)
+
+        #Remove punctuation
+        i = re.sub(r'[^\w\s]+', ' ', i)
+        i = re.sub('_', ' ', i)
+        i = re.sub(r'\n', '', i)
+        i = re.sub(r'[^\u0000-\u05C0\u2100-\u214F]+', '', i)
+        i = re.sub('  ', ' ', i)
+
+        #Remove numbers
+        i = re.sub('\d+', '', i)
+
+        #Remove duplicate letters
+        i = re.sub(r'(\w)\1{2,}', r'\1', i)
+
+        #Expand Acronyms using acronym dictionary
+        def acronym_to_word(text):
+            return(re.sub(r"\b(\w+)\b", lambda x: dictionaries.ACRONYM_TRANSLATE.get(x.group(1), x.group(1)), text))
+
+        i = acronym_to_word(i)
+
+        i = re.sub('  ', ' ', i)
+        cleanTweets.append(i)
     
-    df['Text'] = df['Text'].apply(emoji_to_text)
-    print("Replaced emojis")
-    #df.to_csv(r'code\dataset2.csv')
-
-    #remove URLs
-    df = df.apply(lambda x: x.replace({r'http\S+': ''}, regex=True))
-    (print('Removed URLs'))
-
-    #turn all text to lower case
-    df['Text'] = df['Text'].str.lower()
-    print('Turned text to lowercase')
-
-    #expand contractions
-    df['Text'] = df['Text'].str.replace("’", "'") #replace instances of different apostrophe so they are recognized by the contraction dictionary
-    def expand_contractions(text):
-        return(re.sub(r"\b(\w+('\w+))\b", lambda x: dictionaries.CONTRACTIONS.get(x.group(1), x.group(1)), text)) #change regex from expanding acronyms to handle apostrophe
-    df['Text'] = df['Text'].apply(expand_contractions)
-
-    #remove stopwords
-    def remove_stopwords(tweet):
-        return(re.sub(r"\b(\w+)\b", lambda x: dictionaries.STOPWORDS.get(x.group(1), x.group(1)), tweet))
-    df['Text'] = df['Text'].apply(remove_stopwords)
-    print('Removed Stopwords')
-
-    #Remove punctuation
-    df['Text'] = df['Text'].str.replace(r'[^\w\s]+', ' ', regex=True)
-    df['Text'] = df['Text'].str.replace('_', ' ')
-    df['Text'] = df['Text'].str.replace(r'\n', '', regex=True)
-    df['Text'] = df['Text'].str.replace(r'[^\u0000-\u05C0\u2100-\u214F]+', '', regex=True)
-    df['Text'] = df['Text'].str.replace('  ', ' ', regex=True)
-    print('Removed punctuation')
-
-    #Remove numbers
-    df['Text'] = df['Text'].str.replace('\d+', '', regex=True)
-    print('Removed numbers')
-
-    #Remove duplicate letters
-    df['Text'] = df['Text'].str.replace(r'(\w)\1{2,}', r'\1', regex=True)
-    print('Removed duplicate letters')
-
-    #Expand Acronyms using acronym dictionary
-    def acronym_to_word(text):
-        return(re.sub(r"\b(\w+)\b", lambda x: dictionaries.ACRONYM_TRANSLATE.get(x.group(1), x.group(1)), text))
-
-    df['Text'] = df['Text'].apply(acronym_to_word)
-    print('Replaced acronyms with their meaning')
-
-    df['Text'] = df['Text'].str.replace('  ', ' ', regex=True)
-    #Write the changes to csv file
-    df.to_csv(r'tweetSentiment\user_dataset.csv')
+    print(cleanTweets)
+    return(cleanTweets)
