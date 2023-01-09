@@ -1,12 +1,14 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split as tts
-from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.feature_extraction.text import TfidfVectorizer, TfidfTransformer, CountVectorizer
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.linear_model import LogisticRegression
 from sklearn.svm import SVC
 from sklearn import metrics
+import pickle
 
-df = pd.read_csv(r'code\dataset1.csv', encoding='utf-8')
+
+df = pd.read_csv(r'C:\Users\cleme\Documents\1HonoursProject\Code\dataset1.csv', encoding='utf-8')
 
 #get only the score and text columns that will be used for the classification
 ml_df = df.filter(['Score', 'Text'], axis=1)
@@ -19,12 +21,20 @@ y = ml_df['Score']
 x_train, x_test, y_train, y_test = tts(x, y, test_size = 0.2, random_state = 0)
 
 #Use TFIDF to vectorize tweets
-vectoriser = TfidfVectorizer(stop_words = 'english', analyzer='word')
+vectoriser = CountVectorizer(decode_error = "replace")
+transformer = TfidfTransformer()
+
 #On the training set
 x_train_tfidf = vectoriser.fit_transform(x_train)
+x_train_tfidf = transformer.fit_transform(x_train_tfidf)
+
 
 #On the test set
 x_test_tfidf = vectoriser.transform(x_test)
+x_test_tfidf = transformer.transform(x_test_tfidf)
+
+file_name = 'tfidf.sav'
+pickle.dump(vectoriser.vocabulary_, open("tfidf.sav", "wb"))
 
 #Use multinomial Naïve Bayes to classify test set
 nb = MultinomialNB()
@@ -33,6 +43,9 @@ nb.fit(x_train_tfidf, y_train)
 nb.score(x_test_tfidf, y_test)
 
 y_pred = nb.predict(x_test_tfidf)
+
+filename = 'finalized_model.sav'
+pickle.dump(nb, open(filename, 'wb'))
 
 #Find accuracy
 score_nb = metrics.accuracy_score(y_test, y_pred)
