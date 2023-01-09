@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from tweetSentiment.forms import DataEntryForm
 from tweetSentiment import preprocessing
+from tweetSentiment import ml_model
 from .models import RequestedData
 
 
@@ -32,7 +33,8 @@ def entry(request):
                 cleanTweets = preprocessing.cleanTweets(tweets)
 
             for i in range(len(cleanTweets)):
-                RequestedData.objects.create(tweet_text = cleanTweets[i], request_number = request_number)
+                tweet_sentiment = ml_model.prediction_model(cleanTweets[i])
+                RequestedData.objects.create(tweet_text = cleanTweets[i], request_number = request_number, tweet_sentiment = tweet_sentiment)
             return redirect('results')
     
     else:
@@ -43,6 +45,7 @@ def entry(request):
 
 
 def results(request):
+    #user_input = request.GET["age"]
     last_object = RequestedData.objects.last()
     number = last_object.request_number
     query_results = RequestedData.objects.filter(request_number = number)
