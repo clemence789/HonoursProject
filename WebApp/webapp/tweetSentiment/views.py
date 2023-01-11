@@ -4,7 +4,6 @@ from tweetSentiment.forms import DataEntryForm
 from tweetSentiment import preprocessing
 from tweetSentiment import ml_model
 from .models import RequestedData
-import re
 
 
 def index(request):
