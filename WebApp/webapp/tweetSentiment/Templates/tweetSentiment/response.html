@@ -9,10 +9,17 @@
   </head>
   <body>
     <p>Response</p>
+    <table id="table">
+    <tr>
+      <th>Tweet</th>
+      <th>Sentiment Rating</th>
+    </tr>
     {% for tweet in query_results %}
-        <li>{{ tweet.tweet_text }}</li>
-        
-        <li>{{ tweet.tweet_sentiment }}</li>
+    <tr>
+        <td>{{ tweet.tweet_text }}</td>
+        <td id="sentiment">{{ tweet.tweet_sentiment }}</td>
+    </tr>
     {% endfor %}
+  </table>
   </body>
 </html>

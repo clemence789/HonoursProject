@@ -55,3 +55,12 @@ body {
   .radiobutton {
     margin-bottom: 4%;
   }
+
+  table, th, td, tr {
+    border: solid;
+    border-color:lightgrey !important;
+    border-width: 2;
+    border-collapse:collapse;
+    background-color:white;
+    color:black;
+  }
