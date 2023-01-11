@@ -5,7 +5,6 @@ from tweetSentiment import preprocessing
 from tweetSentiment import ml_model
 from .models import RequestedData
 
-
 def index(request):
     return HttpResponse("You're at the sentiment analysis index.")
 
@@ -38,6 +37,7 @@ def entry(request):
             for i in range(len(cleanTweets)):
                 tweet_sentiment = str(ml_model.prediction_model(cleanTweets[i]))
                 
+                signal = signal
                 tweet_sentiment = tweet_sentiment.replace("[", "")
                 tweet_sentiment = tweet_sentiment.replace("]", "")
 
@@ -45,7 +45,7 @@ def entry(request):
                 tweet_text[i] = tweet_text[i].replace("[", "")
                 tweet_text[i] = tweet_text[i].replace("]", "")
 
-                RequestedData.objects.create(tweet_text_clean = cleanTweets[i], request_number = request_number, tweet_sentiment = tweet_sentiment, tweet_text = tweet_text[i])
+                RequestedData.objects.create(tweet_text_clean = cleanTweets[i], request_number = request_number, tweet_sentiment = tweet_sentiment, tweet_text = tweet_text[i], signal = signal)
             return redirect('results')
     
     else:
