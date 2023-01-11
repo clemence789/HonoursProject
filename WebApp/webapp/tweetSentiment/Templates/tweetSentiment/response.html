@@ -11,7 +11,8 @@
     <p>Response</p>
     {% for tweet in query_results %}
         <li>{{ tweet.tweet_text }}</li>
-        <li></li>
+        
+        <li>{{ tweet.tweet_sentiment }}</li>
     {% endfor %}
   </body>
 </html>
