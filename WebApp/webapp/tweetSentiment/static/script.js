@@ -7,4 +7,12 @@ function filterSelection(){
     document.getElementById('username_div').style.display = 'none';
     document.getElementById('keyword_div').style.display = 'inline';
   }
+
+  var table = document.getElementById("table");
+  for(var i = 0, row; row = table.rows[i]; i++) {
+    
+  }
+  if(sentiment === "5"){
+
+  }
 }

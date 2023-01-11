@@ -9,4 +9,5 @@ def prediction_model(tweet):
 
     nb = pickle.load(open(r'tweetSentiment/finalized_model.sav', 'rb'))
     prediction = nb.predict(tweet)
+    print(prediction)
     return prediction
