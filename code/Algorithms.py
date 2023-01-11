@@ -21,31 +21,30 @@ y = ml_df['Score']
 x_train, x_test, y_train, y_test = tts(x, y, test_size = 0.2, random_state = 0)
 
 #Use TFIDF to vectorize tweets
-vectoriser = CountVectorizer(decode_error = "replace")
-transformer = TfidfTransformer()
+vectoriser = TfidfVectorizer()
 
 #On the training set
 x_train_tfidf = vectoriser.fit_transform(x_train)
-x_train_tfidf = transformer.fit_transform(x_train_tfidf)
-
 
 #On the test set
 x_test_tfidf = vectoriser.transform(x_test)
-x_test_tfidf = transformer.transform(x_test_tfidf)
 
 file_name = 'tfidf.sav'
-pickle.dump(vectoriser.vocabulary_, open("tfidf.sav", "wb"))
+pickle.dump(vectoriser, open("tfidf.sav", "wb"))
 
 #Use multinomial Naïve Bayes to classify test set
 nb = MultinomialNB()
 nb.fit(x_train_tfidf, y_train)
 
+filename = 'finalized_model.sav'
+pickle.dump(nb, open(filename, 'wb'))
+
 nb.score(x_test_tfidf, y_test)
 
 y_pred = nb.predict(x_test_tfidf)
+print(y_pred)
 
-filename = 'finalized_model.sav'
-pickle.dump(nb, open(filename, 'wb'))
+
 
 #Find accuracy
 score_nb = metrics.accuracy_score(y_test, y_pred)
@@ -82,4 +81,9 @@ print(metrics.classification_report(y_test, y_pred, target_names = ['1', '2', '3
 print(metrics.confusion_matrix(y_test, y_pred))
 print(score_svm)
 
+text = ["war hate maul death kill", "love joy happy yay love life", "i guess this was alright it was not too bad", "war hate maul death kill"]
+loaded_vec = pickle.load(open(r'tfidf.sav', "rb"))
+text = loaded_vec.transform(text)
+prediction = nb.predict(text)
+print(prediction)
 
