@@ -21,7 +21,7 @@ print("Replaced emojis")
 
 #remove URLs
 df = df.apply(lambda x: x.replace({r'http\S+': ''}, regex=True))
-(print('Removed URLs'))
+print('Removed URLs')
 
 #turn all text to lower case
 df['Text'] = df['Text'].str.lower()
@@ -63,5 +63,6 @@ df['Text'] = df['Text'].apply(acronym_to_word)
 print('Replaced acronyms with their meaning')
 
 df['Text'] = df['Text'].str.replace('  ', ' ', regex=True)
+
 #Write the changes to csv file
 df.to_csv(r'code\dataset1.csv')
