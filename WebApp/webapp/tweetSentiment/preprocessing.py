@@ -6,33 +6,40 @@ import re
 from tweetSentiment import dictionaries
 
 #Collect tweets from keyword
-def collectTweetsKeywords(bearer_token, keywords):
+def collectTweetsKeywords(bearer_token, keywords, numberTweets):
     keywords = str(keywords + ' -is:retweet lang:en')
-    client = tweepy.Client(bearer_token = bearer_token, wait_on_rate_limit = True)
+    
+    numberTweets = numberTweets.replace("[", "")
+    numberTweets = numberTweets.replace("]", "")
+    numberTweets = int(numberTweets)
 
-    max_results = 10
-    iteration = 0
-    while iteration < 1:
-        tweets = client.search_recent_tweets(
-            keywords,
-            max_results = max_results, #max results received, has to be number between 10 and 100
-            tweet_fields = ['text']
-            )
+    client = tweepy.Client(bearer_token = bearer_token, wait_on_rate_limit = True)
+    
+    tweets = client.search_recent_tweets(
+        keywords,
+        max_results = numberTweets, #max results received, has to be number between 10 and 100
+        tweet_fields = ['text']
+        )
         
-        data = []
-        for i in tweets.data:
-            in_tweet = []
-            in_tweet.append(str(i.text))
-            data.append(in_tweet)
-        iteration+=1       
-        print('Tweets collected: ' + str(len(tweets.data)))
+    data = []
+    for i in tweets.data:
+        in_tweet = []
+        in_tweet.append(str(i.text))
+        data.append(in_tweet)
+          
+    print('Tweets collected: ' + str(len(tweets.data)))
 
     return(data)
         
 
 #Collect tweets from username
-def collectTweetsUsername(bearer_token, username):
+def collectTweetsUsername(bearer_token, username, numberTweets):
     user = str(username)
+
+    numberTweets = numberTweets.replace("[", "")
+    numberTweets = numberTweets.replace("]", "")
+    numberTweets = int(numberTweets)
+
     client = tweepy.Client(bearer_token = bearer_token, wait_on_rate_limit = True)
     
     #get user id based on username
@@ -40,22 +47,17 @@ def collectTweetsUsername(bearer_token, username):
     username = user.data['id']
 
     #returns dictionary so need to extract user id from it
-    max_results = 10
-    iteration = 0
-    while iteration < 1:
-        tweets = client.get_users_tweets(
-            username,
-            max_results = max_results,
-            tweet_fields = ['text']
-            )
+    tweets = client.get_users_tweets(
+        username,
+        max_results = numberTweets,
+        tweet_fields = ['text']
+        )
 
-        data = []
-        for i in tweets.data:
-            in_tweet = []
-            in_tweet.append(str(i.text))
-            data.append(in_tweet)
-        iteration +=1       
-        print('Tweets collected: ' + str(len(tweets.data)))
+    data = []
+    for i in tweets.data:
+        in_tweet = []
+        in_tweet.append(str(i.text))
+        data.append(in_tweet)
     
     return(data)
 
