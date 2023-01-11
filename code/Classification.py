@@ -9,18 +9,19 @@ def sentiment_scores(sentence):
     sentiment = ""
     sentiment_analyser = SentimentIntensityAnalyzer()
     sentiment_dict = sentiment_analyser.polarity_scores(sentence)
-    if sentiment_dict['compound'] < -0.50 :
+    if sentiment_dict['compound'] < -0.65 :
         sentiment = '1'
     elif sentiment_dict['compound'] <= -0.05 :
         sentiment = '2'
     elif sentiment_dict['compound'] <= 0.05:
         sentiment = '3'
-    elif sentiment_dict['compound'] <= 0.5:
+    elif sentiment_dict['compound'] <= 0.65:
         sentiment = '4'
     else:
         sentiment = '5'
     return sentiment
 
+#df['Text'] = df['Text'].to_string()
 df['Score'] = df['Text'].apply(sentiment_scores)
 
 #Shift classification column to the front
