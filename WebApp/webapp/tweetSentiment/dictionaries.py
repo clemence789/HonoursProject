@@ -2,6 +2,7 @@
 
 CONTRACTIONS = { 
 "ain't": "is not",
+"aint": "is not",
 "aren't": "are not",
 "can't": "cannot",
 "can't've": "cannot have",
