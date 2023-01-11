@@ -4,6 +4,7 @@ from tweetSentiment.forms import DataEntryForm
 from tweetSentiment import preprocessing
 from tweetSentiment import ml_model
 from .models import RequestedData
+import re
 
 
 def index(request):
@@ -34,8 +35,17 @@ def entry(request):
                 tweet_text = preprocessing.collectTweetsUsername(bearer_token, username, numberTweets)
                 cleanTweets = preprocessing.cleanTweets(tweet_text)
 
+
             for i in range(len(cleanTweets)):
                 tweet_sentiment = str(ml_model.prediction_model(cleanTweets[i]))
+                
+                tweet_sentiment = tweet_sentiment.replace("[", "")
+                tweet_sentiment = tweet_sentiment.replace("]", "")
+
+                tweet_text[i] = str(tweet_text[i])
+                tweet_text[i] = tweet_text[i].replace("[", "")
+                tweet_text[i] = tweet_text[i].replace("]", "")
+
                 RequestedData.objects.create(tweet_text_clean = cleanTweets[i], request_number = request_number, tweet_sentiment = tweet_sentiment, tweet_text = tweet_text[i])
             return redirect('results')
     
