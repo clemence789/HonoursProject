@@ -22,19 +22,21 @@ def entry(request):
             request_number = last_object.request_number + 1
 
             bearer_token = form.cleaned_data['bearerToken']
+            numberTweets = form.data['number_of_tweets']
             keywords = form.cleaned_data['keywords']
             username = form.cleaned_data['username']
+
             if keywords != '':
-                tweets = preprocessing.collectTweetsKeywords(bearer_token, keywords)
-                cleanTweets = preprocessing.cleanTweets(tweets)
+                tweet_text = preprocessing.collectTweetsKeywords(bearer_token, keywords, numberTweets)
+                cleanTweets = preprocessing.cleanTweets(tweet_text)
             
             elif username != '':
-                tweets = preprocessing.collectTweetsUsername(bearer_token, username)
-                cleanTweets = preprocessing.cleanTweets(tweets)
+                tweet_text = preprocessing.collectTweetsUsername(bearer_token, username, numberTweets)
+                cleanTweets = preprocessing.cleanTweets(tweet_text)
 
             for i in range(len(cleanTweets)):
-                tweet_sentiment = ml_model.prediction_model(cleanTweets[i])
-                RequestedData.objects.create(tweet_text = cleanTweets[i], request_number = request_number, tweet_sentiment = tweet_sentiment)
+                tweet_sentiment = str(ml_model.prediction_model(cleanTweets[i]))
+                RequestedData.objects.create(tweet_text_clean = cleanTweets[i], request_number = request_number, tweet_sentiment = tweet_sentiment, tweet_text = tweet_text[i])
             return redirect('results')
     
     else:
