@@ -8,7 +8,7 @@ function filterSelection(){
     document.getElementById('keyword_div').style.display = 'inline';
   }
 
-  var table = document.getElementById("table");
+  var sentiment = document.getElementById("table");
   for(var i = 0, row; row = table.rows[i]; i++) {
     
   }
