@@ -5,47 +5,58 @@ from tweetSentiment import preprocessing
 from tweetSentiment import ml_model
 from .models import RequestedData
 
+#view of index page
 def index(request):
     return HttpResponse("You're at the sentiment analysis index.")
 
 
-
+#view of entry page
 def entry(request):
     
-    #handling if the request is GET, show user blank form, if request is POST check data is valid
+    #if the request is GET, show user blank form, if request is POST check data is valid
     if request.method == 'POST':
         form = DataEntryForm(request.POST)
 
         if form.is_valid():
+            #get the last object in dataset
             last_object = RequestedData.objects.last()
+            
+            #use the last object to set the request number to +1
             request_number = last_object.request_number + 1
 
+            #get bearer token, number of tweets, keywords, and username from the form
             bearer_token = form.cleaned_data['bearerToken']
             numberTweets = form.data['number_of_tweets']
             keywords = form.cleaned_data['keywords']
             username = form.cleaned_data['username']
 
+            #perform analysis on the tweets if the user entered a username
             if keywords != '':
-                tweet_text = preprocessing.collectTweetsKeywords(bearer_token, keywords, numberTweets)
-                cleanTweets = preprocessing.cleanTweets(tweet_text)
+                tweet_text = preprocessing.collectTweetsKeywords(bearer_token, keywords, numberTweets) #collect tweets
+                cleanTweets = preprocessing.cleanTweets(tweet_text) #preprocess
             
+            #perform analysis on the tweets if the user entered a keyword
             elif username != '':
-                tweet_text = preprocessing.collectTweetsUsername(bearer_token, username, numberTweets)
-                cleanTweets = preprocessing.cleanTweets(tweet_text)
+                tweet_text = preprocessing.collectTweetsUsername(bearer_token, username, numberTweets) #collect tweets
+                cleanTweets = preprocessing.cleanTweets(tweet_text) #preprocess
 
-
+            #go through the tweets array to apply algorithm
             for i in range(len(cleanTweets)):
-                tweet_sentiment = str(ml_model.prediction_model(cleanTweets[i]))
+                tweet_sentiment = str(ml_model.prediction_model(cleanTweets[i])) #apply model
                 
-                signal = signal
+                #remove the brackets from the sentiment returned
                 tweet_sentiment = tweet_sentiment.replace("[", "")
                 tweet_sentiment = tweet_sentiment.replace("]", "")
 
+                #remove the brackets from tweets
                 tweet_text[i] = str(tweet_text[i])
                 tweet_text[i] = tweet_text[i].replace("[", "")
                 tweet_text[i] = tweet_text[i].replace("]", "")
 
-                RequestedData.objects.create(tweet_text_clean = cleanTweets[i], request_number = request_number, tweet_sentiment = tweet_sentiment, tweet_text = tweet_text[i], signal = signal)
+                #add the tweets to database
+                RequestedData.objects.create(tweet_text_clean = cleanTweets[i], request_number = request_number, tweet_sentiment = tweet_sentiment, tweet_text = tweet_text[i])
+            
+            #redirect to results page
             return redirect('results')
     
     else:
@@ -54,11 +65,10 @@ def entry(request):
     return render(request, 'tweetSentiment/data_entry.html', {'form': form})
 
 
-
+#view of results page
 def results(request):
-    #user_input = request.GET["age"]
-    last_object = RequestedData.objects.last()
-    number = last_object.request_number
-    query_results = RequestedData.objects.filter(request_number = number)
-    context = {'query_results': query_results}
-    return render(request, 'tweetSentiment/response.html', context)
+    last_object = RequestedData.objects.last() #get the last object from the database
+    number = last_object.request_number #get the last request number
+    query_results = RequestedData.objects.filter(request_number = number) #fetch all data entered that has that request number
+    context = {'query_results': query_results} #dictionary of results
+    return render(request, 'tweetSentiment/response.html', context) #return the pae with request results

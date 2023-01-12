@@ -1,5 +1,6 @@
 #based on: https://stackoverflow.com/questions/19790188/expanding-english-language-contractions-in-python
 
+#dictionary of contractions
 CONTRACTIONS = { 
 "ain't": "is not",
 "aint": "is not",
@@ -216,6 +217,7 @@ CONTRACTIONS = {
 "youve": "you have"
 }
 
+#dictionary of stopwords
 STOPWORDS = {
 'i': '',
 'the': '', 
@@ -236,6 +238,7 @@ STOPWORDS = {
 'this': ''
 }
 
+#dictionary of acronyms
 ACRONYM_TRANSLATE = {
 'lol' : 'laughing out loud',
 'omg': 'oh my god',

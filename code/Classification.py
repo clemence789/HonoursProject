@@ -2,13 +2,16 @@
 import pandas as pd
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
-df = pd.read_csv(r'code\dataset1.csv', encoding='utf-8')
+df = pd.read_csv(r'code\dataset1.csv', encoding='utf-8') #read the dataframe with pre-processed tweets
 
 # modified code from https://www.geeksforgeeks.org/python-sentiment-analysis-using-vader/
+#add sentiment score using VADER lexicon
 def sentiment_scores(sentence):
     sentiment = ""
     sentiment_analyser = SentimentIntensityAnalyzer()
-    sentiment_dict = sentiment_analyser.polarity_scores(sentence)
+    sentiment_dict = sentiment_analyser.polarity_scores(sentence) #addscore to each tweet
+    
+    #give sentiment score based on lexicon score
     if sentiment_dict['compound'] < -0.65 :
         sentiment = '1'
     elif sentiment_dict['compound'] <= -0.05 :
@@ -21,10 +24,9 @@ def sentiment_scores(sentence):
         sentiment = '5'
     return sentiment
 
-#df['Text'] = df['Text'].to_string()
-df['Score'] = df['Text'].apply(sentiment_scores)
+df['Score'] = df['Text'].apply(sentiment_scores) #add score to score column
 
-#Shift classification column to the front
+#Shift score column to the front
 df = df[['Score'] + [col for col in df.columns if col != 'Classification']]
 
 #delete extra column created by appending classification to the dataframe

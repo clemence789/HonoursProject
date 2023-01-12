@@ -1,19 +1,27 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en-US">
+  
   <head>
     <meta charset="utf-8" />
     <script src="{% static 'script.js' %}" src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <title>Twitter Sentiment Classifier</title>
     <link rel="stylesheet" href="{% static 'style.css' %}">
   </head>
+  
   <body>
     <p>Response</p>
+    
+    <!-- create table for results -->
     <table id="table">
+    
+    <!-- add headers to table -->
     <tr>
       <th>Tweet</th>
       <th>Sentiment Rating</th>
     </tr>
+
+    <!-- loop through the results and add tweet texts and the sentiment to columns-->
     {% for tweet in query_results %}
     <tr>
         <td>{{ tweet.tweet_text }}</td>
@@ -21,5 +29,6 @@
     </tr>
     {% endfor %}
   </table>
+  
   </body>
 </html>

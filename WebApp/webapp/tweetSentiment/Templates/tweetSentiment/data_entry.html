@@ -1,22 +1,29 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en-US">
+  
   <head>
     <meta charset="utf-8" />
     <script src="{% static 'script.js' %}" src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <title>Twitter Sentiment Classifier</title>
     <link rel="stylesheet" href="{% static 'style.css' %}">
   </head>
+  
   <body>
     <div class="all">
     <p>Please give information on the tweets you would like to analyse</p>
+
+    <!-- form -->
     <form action="" method="post" class="form">
       {% csrf_token %}
+
+      <!-- get the bearer token label and field from form -->
       <div id="bearerToken" class="fill">
         {{ form.bearerToken.label_tag }}
         {{ form.bearerToken }}
       </div>
       
+      <!-- get the number of tweets label and field from form -->
       <div id="tweetNum" class="fill">
         {{ form.number_of_tweets.label_tag}}
         {{ form.number_of_tweets }}
@@ -25,6 +32,7 @@
 
         <legend>Select filter type:</legend>
     
+        <!-- radio buttons for keyword or username selection, activate filterSelection function when selected to show username or keyword field-->
         <div class="radiobutton">
           <input type="radio" id="username" name="selection" value="username" onclick="filterSelection()">
           <label for="username">User</label>
@@ -35,18 +43,21 @@
           <label for="keyword">Keyword(s)</label>
         </div>
 
-    <div class="fill">
-      <div id="username_div">
-        {{ form.username.label_tag }}
-        {{ form.username }}
-      </div>
+
+      <!-- username and keyword labels and fields -->
+      <div class="fill">
+        <div id="username_div">
+          {{ form.username.label_tag }}
+          {{ form.username }}
+        </div>
       
       <div id="keyword_div">
         {{ form.keywords.label_tag }}
         {{ form.keywords }}
       </div>
-    </div>
+      </div>
 
+      <!-- submit button -->
       <input class="button" type="submit" value="Submit">
     </form>
   </div>

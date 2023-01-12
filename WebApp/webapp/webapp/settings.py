@@ -31,7 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'tweetSentiment.apps.TweetSentimentConfig',
+    'tweetSentiment.apps.TweetSentimentConfig', #add app
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

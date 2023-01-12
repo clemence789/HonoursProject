@@ -3,8 +3,8 @@ import emoji
 import re
 import dictionaries
 
-df = pd.read_csv(r'code\dataset.csv', encoding='utf-8')
-df.columns = ['ID', 'Date', 'Username', 'Text']
+df = pd.read_csv(r'code\dataset.csv', encoding='utf-8') #read csv with saved tweets
+df.columns = ['ID', 'Date', 'Username', 'Text'] #add columns to dataframe
 
 #Remove rows with empty values
 df = df.dropna(axis=0)
@@ -17,7 +17,6 @@ def emoji_to_text(text):
         return text
 df['Text'] = df['Text'].apply(emoji_to_text)
 print("Replaced emojis")
-#df.to_csv(r'code\dataset2.csv')
 
 #remove URLs
 df = df.apply(lambda x: x.replace({r'http\S+': ''}, regex=True))
@@ -62,7 +61,7 @@ def acronym_to_word(text):
 df['Text'] = df['Text'].apply(acronym_to_word)
 print('Replaced acronyms with their meaning')
 
-df['Text'] = df['Text'].str.replace('  ', ' ', regex=True)
+df['Text'] = df['Text'].str.replace('  ', ' ', regex=True) #remove double spaces
 
 #Write the changes to csv file
 df.to_csv(r'code\dataset1.csv')
