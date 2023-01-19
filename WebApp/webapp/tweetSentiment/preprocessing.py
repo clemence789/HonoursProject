@@ -2,9 +2,21 @@ import tweepy
 import emoji
 import re
 from tweetSentiment import dictionaries
+import string
 
 #Collect tweets from keyword
 def collectTweetsKeywords(bearer_token, keywords, numberTweets):
+    #clean input data
+    
+    #turn all text to lower case
+    keywords = keywords.lower()
+
+    #replace comma with space
+    keywords = keywords.replace(',', ' ')
+
+    #Remove punctuation
+    keywords = keywords.translate(str.maketrans('', '', string.punctuation))
+    
     #get request string based on entered keywords
     keywords = str(keywords + ' -is:retweet lang:en')
     
