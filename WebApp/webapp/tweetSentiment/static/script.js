@@ -18,3 +18,8 @@ function filterSelection(){
 
   }
 }
+
+function filter(){
+  document.getElementById('table_neg').style.display = 'inline';
+  document.getElementById('neg_button').style.display = 'none';
+}
