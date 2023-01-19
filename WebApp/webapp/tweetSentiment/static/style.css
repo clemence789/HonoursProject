@@ -63,8 +63,17 @@ body {
     border-collapse:collapse;
     background-color:white;
     color:black;
+    margin-bottom:20px;
   }
 
   .errorlist {
     color:red !important;
+  }
+
+  #table_neg {
+    display:none;
+  }
+
+  #neg_button {
+    display:inline;
   }
