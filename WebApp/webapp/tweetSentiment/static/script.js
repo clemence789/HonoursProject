@@ -8,15 +8,6 @@ function filterSelection(){
     document.getElementById('username_div').style.display = 'none';
     document.getElementById('keyword_div').style.display = 'inline';
   }
-
-  //get tweets that have a sentiment score of 5
-  var sentiment = document.getElementById("table");
-  for(var i = 0, row; row = table.rows[i]; i++) {
-    
-  }
-  if(sentiment === "5"){
-
-  }
 }
 
 function filter(){
