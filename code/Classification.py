@@ -24,6 +24,8 @@ def sentiment_scores(sentence):
         sentiment = '5'
     return sentiment
 
+#ranked 1 to 5 with 1 being very negative and 5 being very positive
+
 df['Score'] = df['Text'].apply(sentiment_scores) #add score to score column
 
 #Shift score column to the front
