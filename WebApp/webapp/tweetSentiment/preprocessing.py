@@ -3,6 +3,9 @@ import emoji
 import re
 from tweetSentiment import dictionaries
 import string
+import nltk
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize, sent_tokenize
 
 #Collect tweets from keyword
 def collectTweetsKeywords(bearer_token, keywords, numberTweets):
@@ -102,6 +105,9 @@ def cleanTweets(tweets):
         #remove URLs
         i = re.sub(r'http\S+', '', i)
 
+        #Remove tags
+        i = re.sub(r'[@]\w+', '', i)
+
         #turn all text to lower case
         i = i.lower()
 
@@ -140,3 +146,12 @@ def cleanTweets(tweets):
         cleanTweets.append(i)
     
     return(cleanTweets) #return pre-processed tweets
+
+def tagTweets(tweets):
+    print(tweets)
+    tagged_tweets = []
+    for tweet in tweets:
+        wordsList = word_tokenize(str(tweet))
+        tweet = nltk.pos_tag(wordsList)
+        tagged_tweets.append(tweet)
+    return(tagged_tweets)
