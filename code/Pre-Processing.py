@@ -22,6 +22,10 @@ print("Replaced emojis")
 df = df.apply(lambda x: x.replace({r'http\S+': ''}, regex=True))
 print('Removed URLs')
 
+#Remove tagged people
+df['Text'] = df['Text'].str.replace(r'[@]\w+', '')
+print('Removed tagged usernames')
+
 #turn all text to lower case
 df['Text'] = df['Text'].str.lower()
 print('Turned text to lowercase')
