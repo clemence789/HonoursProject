@@ -34,11 +34,14 @@ def entry(request):
             if keywords != '':
                 tweet_text = preprocessing.collectTweetsKeywords(bearer_token, keywords, numberTweets) #collect tweets
                 cleanTweets = preprocessing.cleanTweets(tweet_text) #preprocess
+                tagged_tweets = preprocessing.tagTweets(cleanTweets) #POS tagging
             
             #perform analysis on the tweets if the user entered a keyword
             elif username != '':
                 tweet_text = preprocessing.collectTweetsUsername(bearer_token, username, numberTweets) #collect tweets
                 cleanTweets = preprocessing.cleanTweets(tweet_text) #preprocess
+                tagged_tweets = preprocessing.tagTweets(cleanTweets) #POS tagging
+                print(tagged_tweets)
 
             #go through the tweets array to apply algorithm
             for i in range(len(cleanTweets)):
@@ -71,6 +74,6 @@ def results(request):
     last_object = RequestedData.objects.last() #get the last object from the database
     number = last_object.request_number #get the last request number
     query_results = RequestedData.objects.filter(request_number = number) #fetch all data entered that has that request number
-    negative_tweets = RequestedData.objects.filter(request_number = number, tweet_sentiment = '5').values('tweet_text')
+    negative_tweets = RequestedData.objects.filter(request_number = number, tweet_sentiment = '1').values('tweet_text')
     context = {'query_results': query_results, 'negative_tweets': negative_tweets} #dictionary of results
     return render(request, 'tweetSentiment/response.html', context) #return the page with request results
