@@ -5,6 +5,7 @@ from tweetSentiment import dictionaries
 import string
 import nltk
 from nltk.tokenize import word_tokenize
+import spacy
 
 #Collect tweets from keyword
 def collectTweetsKeywords(bearer_token, keywords, numberTweets):
@@ -117,9 +118,9 @@ def cleanTweets(tweets):
         i = expand_contractions(i)
 
         #remove stopwords
-        def remove_stopwords(tweet):
-            return(re.sub(r"\b(\w+)\b", lambda x: dictionaries.STOPWORDS.get(x.group(1), x.group(1)), tweet))
-        i = remove_stopwords(i)
+        #def remove_stopwords(tweet):
+        #    return(re.sub(r"\b(\w+)\b", lambda x: dictionaries.STOPWORDS.get(x.group(1), x.group(1)), tweet))
+        #i = remove_stopwords(i)
 
         #Remove punctuation
         i = re.sub(r'[^\w\s]+', ' ', i)
@@ -147,10 +148,36 @@ def cleanTweets(tweets):
     return(cleanTweets) #return pre-processed tweets
 
 def tagTweets(tweets):
+    
     print(tweets)
-    tagged_tweets = []
+
+    nlp = spacy.load('en_core_web_sm') #loading the spacy engine
+    def getSubjectPhrase(tweets):
+        for token in tweets:
+            if("subj" in token.dep_):
+                subtree = list(token.subtree)
+                start = subtree[0].i
+                end = subtree[-1].i + 1
+                return tweets[start:end]
+    
+    def getObjectPhrase(tweets):
+        for token in tweets:
+            if("dobj" in token.dep_):
+                subtree = list(token.subtree)
+                start = subtree[0].i
+                end = subtree[-1].i + 1
+                return tweets[start:end]
+    tags = []
     for tweet in tweets:
-        wordsList = word_tokenize(str(tweet))
-        tweet = nltk.pos_tag(wordsList)
-        tagged_tweets.append(tweet)
-    return(tagged_tweets)
+        tweet = nlp(tweet)
+        subject_phrase = str(getSubjectPhrase(tweet))
+        object_phrase = str(getObjectPhrase(tweet))
+        print("tweet: " + str(tweet) + " subject: " + str(subject_phrase))
+        print("tweet: " + str(tweet) + " subject: " + str(object_phrase))
+
+        if subject_phrase is None:
+            tags.append(object_phrase)
+        else: 
+            tags.append(subject_phrase)
+    return(tags)
+    
