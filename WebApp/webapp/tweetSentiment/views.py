@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from tweetSentiment.forms import DataEntryForm
 from tweetSentiment import preprocessing
 from tweetSentiment import ml_model
-from .models import RequestedData
+from .models import RequestedData, NegativeTweets
 
 #view of index page
 def index(request):
@@ -58,6 +58,22 @@ def entry(request):
 
                 #add the tweets to database
                 RequestedData.objects.create(tweet_text_clean = cleanTweets[i], request_number = request_number, tweet_sentiment = tweet_sentiment, tweet_text = tweet_text[i])
+
+            negative_tweets = RequestedData.objects.filter(request_number = request_number, tweet_sentiment = '5').values('tweet_text')
+            print(type(negative_tweets))
+
+            tweetsSub = []
+
+            for tweet in negative_tweets:
+                tweetsSub.append(tweet['tweet_text'])
+
+            subject = preprocessing.tagTweets(tweetsSub)
+            
+            for i in range(len(subject)):
+                if subject[i] is None:
+                    subject[i] = "None"
+
+                NegativeTweets.objects.create(tweet_text = negative_tweets[i], subject = subject[i]) #personal_tweet
             
             #redirect to results page
             return redirect('results')
@@ -74,6 +90,6 @@ def results(request):
     last_object = RequestedData.objects.last() #get the last object from the database
     number = last_object.request_number #get the last request number
     query_results = RequestedData.objects.filter(request_number = number) #fetch all data entered that has that request number
-    negative_tweets = RequestedData.objects.filter(request_number = number, tweet_sentiment = '1').values('tweet_text')
+    negative_tweets = RequestedData.objects.filter(request_number = number, tweet_sentiment = '5').values('tweet_text')
     context = {'query_results': query_results, 'negative_tweets': negative_tweets} #dictionary of results
     return render(request, 'tweetSentiment/response.html', context) #return the page with request results
