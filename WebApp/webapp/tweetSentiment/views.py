@@ -59,12 +59,12 @@ def entry(request):
                 #add the tweets to database
                 RequestedData.objects.create(tweet_text_clean = cleanTweets[i], request_number = request_number, tweet_sentiment = tweet_sentiment, tweet_text = tweet_text[i])
 
-            negative_tweets = RequestedData.objects.filter(request_number = request_number, tweet_sentiment = '5').values('tweet_text')
+            negative_tweets = RequestedData.objects.filter(request_number = request_number, tweet_sentiment = '5').values('tweet_text_clean')
 
             tweetsSub = []
 
             for tweet in negative_tweets:
-                tweetsSub.append(tweet['tweet_text'])
+                tweetsSub.append(tweet['tweet_text_clean'])
 
             subject = preprocessing.tagTweets(tweetsSub)
             
