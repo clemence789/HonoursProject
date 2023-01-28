@@ -47,5 +47,22 @@
     {% endfor %}
   </table>
 
+  <button class="button" id="neg_button_personal" onclick="filterPersonal()">Filter negative personal tweets</button>
+
+  <table id="table_neg_personal">
+    
+    <!-- add headers to table -->
+    <tr>
+      <th>Tweet</th>
+    </tr>
+
+    <!-- loop through the results and add tweet texts and the sentiment to columns-->
+    {% for tweet in personal_tweets %}
+    <tr>
+        <td>{{ tweet.tweet_text }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+
   </body>
 </html>
