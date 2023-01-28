@@ -60,7 +60,6 @@ def entry(request):
                 RequestedData.objects.create(tweet_text_clean = cleanTweets[i], request_number = request_number, tweet_sentiment = tweet_sentiment, tweet_text = tweet_text[i])
 
             negative_tweets = RequestedData.objects.filter(request_number = request_number, tweet_sentiment = '5').values('tweet_text')
-            print(type(negative_tweets))
 
             tweetsSub = []
 
@@ -72,8 +71,15 @@ def entry(request):
             for i in range(len(subject)):
                 if subject[i] is None:
                     subject[i] = "None"
+                
+                if "they" in subject[i]:
+                    personal = "1"
+                elif "you" in subject[i]:
+                    personal = "1"
+                else:
+                    personal = "0"
 
-                NegativeTweets.objects.create(tweet_text = negative_tweets[i], subject = subject[i]) #personal_tweet
+                NegativeTweets.objects.create(tweet_text = negative_tweets[i], subject = subject[i], personal_tweet = personal, request_number = request_number)
             
             #redirect to results page
             return redirect('results')
@@ -91,5 +97,6 @@ def results(request):
     number = last_object.request_number #get the last request number
     query_results = RequestedData.objects.filter(request_number = number) #fetch all data entered that has that request number
     negative_tweets = RequestedData.objects.filter(request_number = number, tweet_sentiment = '5').values('tweet_text')
-    context = {'query_results': query_results, 'negative_tweets': negative_tweets} #dictionary of results
+    personal_tweets = NegativeTweets.objects.filter(request_number = number, personal_tweet = '1').values('tweet_text')
+    context = {'query_results': query_results, 'negative_tweets': negative_tweets, 'personal_tweets': personal_tweets} #dictionary of results
     return render(request, 'tweetSentiment/response.html', context) #return the page with request results
