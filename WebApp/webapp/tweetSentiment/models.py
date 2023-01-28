@@ -12,4 +12,5 @@ class NegativeTweets(models.Model):
     tweet_text = models.CharField(max_length = 5000) #tweet text
     personal_tweet = models.CharField(max_length = 1) #Is it directed at someone directly or not
     subject = models.CharField(max_length = 5000) #subject of tweet
+    request_number = models.IntegerField()
 
