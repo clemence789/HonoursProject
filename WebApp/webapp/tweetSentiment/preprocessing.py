@@ -180,4 +180,3 @@ def tagTweets(tweets):
         else: 
             tags.append(subject_phrase)
     return(tags)
-    
