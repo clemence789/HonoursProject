@@ -70,10 +70,19 @@ body {
     color:red !important;
   }
 
-  #table_neg {
+  #table_neg{
     display:none;
   }
 
   #neg_button {
     display:inline;
   }
+
+  #table_neg_personal{
+    display:none;
+  }
+
+  #neg_button_personal{
+    display:inline;
+  }
+
