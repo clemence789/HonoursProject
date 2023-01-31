@@ -8,12 +8,12 @@ class DataEntryForm(forms.Form):
     def validate_number(value):
         if value < 10:
             raise ValidationError(
-                _('%(value)s is too small'),
+                _('Must be a number between 10 and 100'),
                 params={'value': value},
             )
         elif value > 100:
             raise ValidationError(
-                _('%(value)s is too large'),
+                _('Must be a number between 10 and 100'),
                 params={'value': value},
             )
     
