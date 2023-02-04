@@ -4,7 +4,7 @@ import re
 import dictionaries
 
 df = pd.read_csv(r'code\dataset.csv', encoding='utf-8') #read csv with saved tweets
-df.columns = ['ID', 'Date', 'Username', 'Text'] #add columns to dataframe
+df.columns = ['ID', 'Date', 'Text'] #add columns to dataframe
 
 #Remove rows with empty values
 df = df.dropna(axis=0)
