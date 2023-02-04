@@ -8,17 +8,18 @@ df = pd.read_csv(r'code\dataset1.csv', encoding='utf-8') #read the dataframe wit
 #add sentiment score using VADER lexicon
 def sentiment_scores(sentence):
     sentiment = ""
+    sentence = str(sentence)
     sentiment_analyser = SentimentIntensityAnalyzer()
     sentiment_dict = sentiment_analyser.polarity_scores(sentence) #addscore to each tweet
     
     #give sentiment score based on lexicon score
-    if sentiment_dict['compound'] < -0.45 :
+    if sentiment_dict['compound'] < -0.50 :
         sentiment = '1'
     elif sentiment_dict['compound'] <= -0.05 :
         sentiment = '2'
     elif sentiment_dict['compound'] <= 0.05:
         sentiment = '3'
-    elif sentiment_dict['compound'] <= 0.65:
+    elif sentiment_dict['compound'] <= 0.50:
         sentiment = '4'
     else:
         sentiment = '5'
