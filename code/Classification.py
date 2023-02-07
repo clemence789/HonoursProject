@@ -13,13 +13,13 @@ def sentiment_scores(sentence):
     sentiment_dict = sentiment_analyser.polarity_scores(sentence) #addscore to each tweet
     
     #give sentiment score based on lexicon score
-    if sentiment_dict['compound'] < -0.50 :
+    if sentiment_dict['compound'] < -0.60:
         sentiment = '1'
-    elif sentiment_dict['compound'] <= -0.05 :
+    elif sentiment_dict['compound'] <= -0.20:
         sentiment = '2'
-    elif sentiment_dict['compound'] <= 0.05:
+    elif sentiment_dict['compound'] <= 0.20:
         sentiment = '3'
-    elif sentiment_dict['compound'] <= 0.50:
+    elif sentiment_dict['compound'] <= 0.60:
         sentiment = '4'
     else:
         sentiment = '5'
