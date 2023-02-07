@@ -24,6 +24,7 @@
         {{ form.bearerToken }}
       </div>
       
+      <legend>How many tweets would you like to classify?</legend>
       <!-- get the number of tweets label and field from form -->
       <div id="tweetNum" class="fill">
         {{ form.number_of_tweets.label_tag}}
@@ -32,7 +33,7 @@
       </div>
       
 
-        <legend>Select filter type:</legend>
+        <legend>Filter by:</legend>
     
         <!-- radio buttons for keyword or username selection, activate filterSelection function when selected to show username or keyword field-->
         <div class="radiobutton">
