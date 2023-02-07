@@ -40,20 +40,13 @@ nb = MultinomialNB()
 svm = SVC(kernel = 'linear')
 lr = LogisticRegression()
 
-f1 = cross_val_score(estimator = nb, X= x, y=y, cv=10, scoring= 'f1_macro')
-recall = cross_val_score(estimator = nb, X= x, y=y, cv=10, scoring= 'recall_macro')
-precision = cross_val_score(estimator = nb, X= x, y=y, cv=10, scoring= 'precision_macro')
+f1 = cross_val_score(estimator = nb, X= x, y=y, cv=10, scoring= 'f1_weighted')
+recall = cross_val_score(estimator = nb, X= x, y=y, cv=10, scoring= 'recall_weighted')
+precision = cross_val_score(estimator = nb, X= x, y=y, cv=10, scoring= 'precision_weighted')
 
 print("recall: ", np.mean(recall))
 print("precision: ", np.mean(precision))
 print("average f1: ", np.mean(f1))
-
-
-
-#kf = model_selection.KFold(n_splits = 10, shuffle = True, random_state=42)
-
-#print("%0.2f accuracy with a standard deviation of %0.2f" % (scores.mean(), scores.std(), scores.f1()))
-
 
 
 nb.fit(x_train, y_train)
@@ -64,20 +57,20 @@ filename = 'finalized_model.sav'
 pickle.dump(nb, open(filename, 'wb'))
 
 
-#nb.score(x_test_tfidf, y_test)
+nb.score(x_test, y_test)
 
 #print predictions of test set
-#y_pred = nb.predict(x_test_tfidf)
+y_pred = nb.predict(x_test)
 #print(y_pred)
 
 
 
 #Find accuracy
-#score_nb = metrics.accuracy_score(y_test, y_pred)
+score_nb = metrics.accuracy_score(y_test, y_pred)
 
-#print(metrics.classification_report(y_test, y_pred, target_names = ['1', '2', '3', '4', '5']))
+print(metrics.classification_report(y_test, y_pred, target_names = ['1', '2', '3', '4', '5']))
 #print(metrics.confusion_matrix(y_test, y_pred))
-#print(score_nb)
+print(score_nb)
 
 
 #repeat with Logistic regression
