@@ -68,4 +68,3 @@ for page in paginator:
         writer = csv.writer(f)
         #rows
         writer.writerows(data)
-
