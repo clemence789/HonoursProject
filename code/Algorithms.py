@@ -27,20 +27,22 @@ y = ml_df['Score'].values.astype('U') #target variable
 vectoriser = TfidfVectorizer()
 
 #Vectorise the tweets
-x_tfidf = vectoriser.fit_transform(x)
+x = vectoriser.fit_transform(x)
 
 #save the tfidf model
 file_name = 'tfidf.sav'
 pickle.dump(vectoriser, open("tfidf.sav", "wb"))
+
+x_train, x_test, y_train, y_test = tts(x, y, test_size = 0.2, random_state = 0)
 
 #Use multinomial Naïve Bayes to classify test set
 nb = MultinomialNB()
 svm = SVC(kernel = 'linear')
 lr = LogisticRegression()
 
-f1 = cross_val_score(estimator = nb, X= x_tfidf, y=y, cv=10, scoring= 'f1_macro')
-recall = cross_val_score(estimator = nb, X= x_tfidf, y=y, cv=10, scoring= 'recall_macro')
-precision = cross_val_score(estimator = nb, X= x_tfidf, y=y, cv=10, scoring= 'precision_macro')
+f1 = cross_val_score(estimator = nb, X= x, y=y, cv=10, scoring= 'f1_macro')
+recall = cross_val_score(estimator = nb, X= x, y=y, cv=10, scoring= 'recall_macro')
+precision = cross_val_score(estimator = nb, X= x, y=y, cv=10, scoring= 'precision_macro')
 
 print("recall: ", np.mean(recall))
 print("precision: ", np.mean(precision))
@@ -54,12 +56,12 @@ print("average f1: ", np.mean(f1))
 
 
 
-#nb.fit(x_train_tfidf, y_train)
+nb.fit(x_train, y_train)
 
 
 #save the nb model
-#filename = 'finalized_model.sav'
-#pickle.dump(nb, open(filename, 'wb'))
+filename = 'finalized_model.sav'
+pickle.dump(nb, open(filename, 'wb'))
 
 
 #nb.score(x_test_tfidf, y_test)
