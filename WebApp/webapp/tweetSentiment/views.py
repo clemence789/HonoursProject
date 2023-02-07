@@ -96,7 +96,7 @@ def results(request):
     last_object = RequestedData.objects.last() #get the last object from the database
     number = last_object.request_number #get the last request number
     query_results = RequestedData.objects.filter(request_number = number) #fetch all data entered that has that request number
-    negative_tweets = RequestedData.objects.filter(request_number = number, tweet_sentiment = '5').values('tweet_text')
+    negative_tweets = RequestedData.objects.filter(request_number = number, tweet_sentiment = "'1'").values('tweet_text')
     personal_tweets = NegativeTweets.objects.filter(request_number = number, personal_tweet = '1').values('tweet_text')
     context = {'query_results': query_results, 'negative_tweets': negative_tweets, 'personal_tweets': personal_tweets} #dictionary of results
     return render(request, 'tweetSentiment/response.html', context) #return the page with request results
