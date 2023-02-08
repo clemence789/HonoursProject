@@ -148,8 +148,6 @@ def cleanTweets(tweets):
     return(cleanTweets) #return pre-processed tweets
 
 def tagTweets(tweets):
-    
-    print(tweets)
 
     nlp = spacy.load('en_core_web_sm') #loading the spacy engine
     def getSubjectPhrase(tweets):
@@ -169,14 +167,14 @@ def tagTweets(tweets):
                 return tweets[start:end]
     tags = []
     for tweet in tweets:
+        subjects = []
         tweet = nlp(tweet)
         subject_phrase = str(getSubjectPhrase(tweet))
         object_phrase = str(getObjectPhrase(tweet))
-        print("tweet: " + str(tweet) + " subject: " + str(subject_phrase))
-        print("tweet: " + str(tweet) + " subject: " + str(object_phrase))
 
-        if subject_phrase is None:
-            tags.append(object_phrase)
-        else: 
-            tags.append(subject_phrase)
+        subjects.append(object_phrase)
+        subjects.append(subject_phrase)
+
+        tags.append(subjects)
+        
     return(tags)
