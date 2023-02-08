@@ -10,6 +10,7 @@
   </head>
   
   <body>
+    {% csrf_token %}
     <p>Response</p>
     
     <!-- create table for results -->
@@ -48,7 +49,7 @@
   </table>
 
   <button class="button" id="neg_button_personal" onclick="filterPersonal()">Filter negative personal tweets</button>
-
+<br>
   <table id="table_neg_personal">
     
     <!-- add headers to table -->
