@@ -51,6 +51,8 @@ def entry(request):
                 tweet_sentiment = tweet_sentiment.replace("[", "")
                 tweet_sentiment = tweet_sentiment.replace("]", "")
 
+                tweet_sentiment = tweet_sentiment.replace("'", "")
+
                 #remove the brackets from tweets
                 tweet_text[i] = str(tweet_text[i])
                 tweet_text[i] = tweet_text[i].replace("[", "")
@@ -59,7 +61,7 @@ def entry(request):
                 #add the tweets to database
                 RequestedData.objects.create(tweet_text_clean = cleanTweets[i], request_number = request_number, tweet_sentiment = tweet_sentiment, tweet_text = tweet_text[i])
 
-            negative_tweets = RequestedData.objects.filter(request_number = request_number, tweet_sentiment = '5').values('tweet_text_clean')
+            negative_tweets = RequestedData.objects.filter(request_number = request_number, tweet_sentiment = '1').values('tweet_text_clean')
 
             tweetsSub = []
 
@@ -69,17 +71,40 @@ def entry(request):
             subject = preprocessing.tagTweets(tweetsSub)
             
             for i in range(len(subject)):
-                if subject[i] is None:
-                    subject[i] = "None"
+                if subject[i][0] is None:
+                    subject[i][0] = "None"
+                if subject[i][1] is None:
+                    subject[i][1] = "None"
                 
-                if "they" in subject[i]:
+                if "they" in subject[i][0]:
                     personal = "1"
-                elif "you" in subject[i]:
+                elif "you" in subject[i][0]:
+                    personal = "1"
+                elif "them" in subject[i][0]:
+                    personal = "1"
+                elif "he" in subject[i][0]:
+                    personal = "1"
+                elif "she" in subject[i][0]:
                     personal = "1"
                 else:
                     personal = "0"
 
-                NegativeTweets.objects.create(tweet_text = negative_tweets[i], subject = subject[i], personal_tweet = personal, request_number = request_number)
+                if "they" in subject[i][1]:
+                    personal = "1"
+                elif "you" in subject[i][1]:
+                    personal = "1"
+                elif "them" in subject[i][1]:
+                    personal = "1"
+                elif "he" in subject[i][1]:
+                    personal = "1"
+                elif "she" in subject[i][1]:
+                    personal = "1"
+                else:
+                    personal = "0"
+
+                print(negative_tweets[i])
+
+                NegativeTweets.objects.create(tweet_text = tweetsSub[i], first_subject = subject[i][0], second_subject=subject[i][1], personal_tweet = personal, request_number = request_number)
             
             #redirect to results page
             return redirect('results')
@@ -96,7 +121,7 @@ def results(request):
     last_object = RequestedData.objects.last() #get the last object from the database
     number = last_object.request_number #get the last request number
     query_results = RequestedData.objects.filter(request_number = number) #fetch all data entered that has that request number
-    negative_tweets = RequestedData.objects.filter(request_number = number, tweet_sentiment = "'1'").values('tweet_text')
+    negative_tweets = RequestedData.objects.filter(request_number = number, tweet_sentiment = '1').values('tweet_text')
     personal_tweets = NegativeTweets.objects.filter(request_number = number, personal_tweet = '1').values('tweet_text')
     context = {'query_results': query_results, 'negative_tweets': negative_tweets, 'personal_tweets': personal_tweets} #dictionary of results
     return render(request, 'tweetSentiment/response.html', context) #return the page with request results
