@@ -1,7 +1,8 @@
 body {
-    background-color:#1DA1F2;
+    background-color: #1DA1F2;
     font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    color:white;   
+    color:white;  
+
 }
 
 .main-heading {
@@ -72,6 +73,7 @@ body {
 
   #table_neg{
     display:none;
+    margin-bottom: 20px !important;
   }
 
   #neg_button {
@@ -84,5 +86,7 @@ body {
 
   #neg_button_personal{
     display:inline;
+    margin-top: 4%;
   }
+
 
