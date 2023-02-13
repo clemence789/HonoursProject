@@ -14,7 +14,10 @@ import numpy as np
 from sklearn.metrics import make_scorer, f1_score
 
 #read dataframe
-df = pd.read_csv(r'code\dataset1.csv', encoding='utf-8')
+#df = pd.read_csv(r'code\dataset1.csv', encoding='utf-8')
+
+#read dataframe other dataset
+df = pd.read_csv(r'code\outside_dataset\outsideDataset.csv', encoding='utf-8')
 
 #get only the score and text columns that will be used for the classification
 ml_df = df.filter(['Score', 'Text'], axis=1)
@@ -30,8 +33,8 @@ vectoriser = TfidfVectorizer()
 x = vectoriser.fit_transform(x)
 
 #save the tfidf model
-file_name = 'tfidf.sav'
-pickle.dump(vectoriser, open("tfidf.sav", "wb"))
+#file_name = 'tfidf.sav'
+#pickle.dump(vectoriser, open("tfidf.sav", "wb"))
 
 x_train, x_test, y_train, y_test = tts(x, y, test_size = 0.2, random_state = 0)
 
@@ -53,8 +56,8 @@ nb.fit(x_train, y_train)
 
 
 #save the nb model
-filename = 'finalized_model.sav'
-pickle.dump(nb, open(filename, 'wb'))
+#filename = 'finalized_model.sav'
+#pickle.dump(nb, open(filename, 'wb'))
 
 
 nb.score(x_test, y_test)
@@ -68,7 +71,7 @@ y_pred = nb.predict(x_test)
 #Find accuracy
 score_nb = metrics.accuracy_score(y_test, y_pred)
 
-print(metrics.classification_report(y_test, y_pred, target_names = ['1', '2', '3', '4', '5']))
+print(metrics.classification_report(y_test, y_pred, target_names = ['0', '1']))
 #print(metrics.confusion_matrix(y_test, y_pred))
 print(score_nb)
 
