@@ -68,4 +68,4 @@ print('Replaced acronyms with their meaning')
 df['Text'] = df['Text'].str.replace('  ', ' ', regex=True) #remove double spaces
 
 #Write the changes to csv file
-df.to_csv(r'code\dataset1.csv')
+df.to_csv(r'code\dataset_clean_2.csv')
