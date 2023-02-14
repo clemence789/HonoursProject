@@ -1,23 +1,27 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split as tts
-from sklearn.feature_extraction.text import TfidfVectorizer, TfidfTransformer, CountVectorizer
+from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.linear_model import LogisticRegression
 from sklearn.svm import SVC
-from sklearn.model_selection import KFold
 from sklearn.model_selection import cross_val_score
 from sklearn import metrics
-import sklearn.model_selection as model_selection
 import pickle
-import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.metrics import make_scorer, f1_score
 
-#read dataframe
-#df = pd.read_csv(r'code\dataset1.csv', encoding='utf-8')
+#<!------------------------------------------------------------my dataset----------------------------------------------------------->
+#read dataframe of my dataset
+#df = pd.read_csv(r'code\dataset_clean.csv', encoding='utf-8')
 
+#<!------------------------------------their dataset----------------------------------------------------------->
 #read dataframe other dataset
-df = pd.read_csv(r'code\outside_dataset\outsideDataset.csv', encoding='utf-8')
+#df = pd.read_csv(r'code\outside_dataset\stanfordDataset.csv', encoding='utf-8')
+
+#<!------------------------------------2 cat dataset----------------------------------------------------------->
+#read dataframe 2 cat dataset
+df = pd.read_csv(r'code\dataset_clean_2cat.csv', encoding='utf-8')
+
 
 #get only the score and text columns that will be used for the classification
 ml_df = df.filter(['Score', 'Text'], axis=1)
@@ -43,9 +47,16 @@ nb = MultinomialNB()
 svm = SVC(kernel = 'linear')
 lr = LogisticRegression()
 
+#<!----------------------------------------weighted----------------------------------------------------------->
+
 f1 = cross_val_score(estimator = nb, X= x, y=y, cv=10, scoring= 'f1_weighted')
 recall = cross_val_score(estimator = nb, X= x, y=y, cv=10, scoring= 'recall_weighted')
 precision = cross_val_score(estimator = nb, X= x, y=y, cv=10, scoring= 'precision_weighted')
+
+#<!---------------------------------------unweighted----------------------------------------------------------->
+#f1 = cross_val_score(estimator = nb, X= x, y=y, cv=10, scoring= 'f1_macro')
+#recall = cross_val_score(estimator = nb, X= x, y=y, cv=10, scoring= 'recall_macro')
+#precision = cross_val_score(estimator = nb, X= x, y=y, cv=10, scoring= 'precision_macro')
 
 print("recall: ", np.mean(recall))
 print("precision: ", np.mean(precision))
@@ -62,18 +73,23 @@ nb.fit(x_train, y_train)
 
 nb.score(x_test, y_test)
 
+
 #print predictions of test set
 y_pred = nb.predict(x_test)
-#print(y_pred)
-
-
 
 #Find accuracy
 score_nb = metrics.accuracy_score(y_test, y_pred)
 
+#<!-------------------------------------------2 columns----------------------------------------------------------->
+
 print(metrics.classification_report(y_test, y_pred, target_names = ['0', '1']))
-#print(metrics.confusion_matrix(y_test, y_pred))
-print(score_nb)
+
+#<!-------------------------------------------5 columns----------------------------------------------------------->
+
+#print(metrics.classification_report(y_test, y_pred, target_names = ['1', '2', '3', '4', '5']))
+
+
+print(metrics.confusion_matrix(y_test, y_pred))
 
 
 #repeat with Logistic regression
