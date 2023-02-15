@@ -3,7 +3,7 @@ from nltk.corpus import wordnet
 from nltk.stem import WordNetLemmatizer
 import pandas as pd
 
-df = pd.read_csv(r'\code\dataset.csv', encoding='utf-8')
+df = pd.read_csv(r'C:\Users\cleme\Documents\1HonoursProject\Code\dataset_clean_2.csv', encoding='utf-8')
 
 def get_wordnet_pos(word):
     tag = nltk.pos_tag([word])[0][1][0].upper()
@@ -16,9 +16,15 @@ def get_wordnet_pos(word):
 lemmatizer = WordNetLemmatizer()
 
 
+sentence = "this is an example sentence used for this example"
 def lmtz(sentence):
     return([lemmatizer.lemmatize(w, get_wordnet_pos(w)) for w in nltk.word_tokenize(sentence)])
     
-df['Text'] = df['Text'].apply(lmtz)
+for i in df['Text']:
+    
+print(lmtz(df.loc[1, 'Text']))
 
-print(df['Text'])
+#df['Text'] = df['Text'].apply(lmtz)
+#print(type(df['Text']))
+
+#print(df['Text'])
