@@ -10,9 +10,9 @@ import pickle
 import numpy as np
 from sklearn.metrics import make_scorer, f1_score
 
-#<!------------------------------------------------------------my dataset----------------------------------------------------------->
+#<!------------------------------------5 cat dataset----------------------------------------------------------->
 #read dataframe of my dataset
-#df = pd.read_csv(r'code\dataset_clean.csv', encoding='utf-8')
+#df = pd.read_csv(r'C:\Users\cleme\Documents\1HonoursProject\Code\dataset_clean_lemmatized_5cat.csv', encoding='utf-8')
 
 #<!------------------------------------their dataset----------------------------------------------------------->
 #read dataframe other dataset
@@ -20,7 +20,7 @@ from sklearn.metrics import make_scorer, f1_score
 
 #<!------------------------------------2 cat dataset----------------------------------------------------------->
 #read dataframe 2 cat dataset
-df = pd.read_csv(r'code\dataset_clean_2cat.csv', encoding='utf-8')
+df = pd.read_csv(r'C:\Users\cleme\Documents\1HonoursProject\Code\dataset_clean_lemmatized_2cat.csv', encoding='utf-8')
 
 
 #get only the score and text columns that will be used for the classification
@@ -49,14 +49,14 @@ lr = LogisticRegression()
 
 #<!----------------------------------------weighted----------------------------------------------------------->
 
-f1 = cross_val_score(estimator = nb, X= x, y=y, cv=10, scoring= 'f1_weighted')
-recall = cross_val_score(estimator = nb, X= x, y=y, cv=10, scoring= 'recall_weighted')
-precision = cross_val_score(estimator = nb, X= x, y=y, cv=10, scoring= 'precision_weighted')
+#f1 = cross_val_score(estimator = nb, X= x, y=y, cv=10, scoring= 'f1_weighted')
+#recall = cross_val_score(estimator = nb, X= x, y=y, cv=10, scoring= 'recall_weighted')
+#precision = cross_val_score(estimator = nb, X= x, y=y, cv=10, scoring= 'precision_weighted')
 
 #<!---------------------------------------unweighted----------------------------------------------------------->
-#f1 = cross_val_score(estimator = nb, X= x, y=y, cv=10, scoring= 'f1_macro')
-#recall = cross_val_score(estimator = nb, X= x, y=y, cv=10, scoring= 'recall_macro')
-#precision = cross_val_score(estimator = nb, X= x, y=y, cv=10, scoring= 'precision_macro')
+f1 = cross_val_score(estimator = nb, X= x, y=y, cv=10, scoring= 'f1_macro')
+recall = cross_val_score(estimator = nb, X= x, y=y, cv=10, scoring= 'recall_macro')
+precision = cross_val_score(estimator = nb, X= x, y=y, cv=10, scoring= 'precision_macro')
 
 print("recall: ", np.mean(recall))
 print("precision: ", np.mean(precision))
