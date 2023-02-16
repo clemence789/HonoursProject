@@ -15,16 +15,21 @@ def get_wordnet_pos(word):
 
 lemmatizer = WordNetLemmatizer()
 
-
-sentence = "this is an example sentence used for this example"
 def lmtz(sentence):
     return([lemmatizer.lemmatize(w, get_wordnet_pos(w)) for w in nltk.word_tokenize(sentence)])
     
-for i in df['Text']:
-    
-print(lmtz(df.loc[1, 'Text']))
+values = df['Text'].values
+texts = []
+for i in range(len(values)):
+    values[i] = str(values[i])
+    lemmatized = lmtz(values[i])
+    texts.append(lemmatized)
 
-#df['Text'] = df['Text'].apply(lmtz)
-#print(type(df['Text']))
+for i in range(len(texts)):
+    texts[i] = ' '.join(texts[i])
 
-#print(df['Text'])
+
+df['Text'] = texts
+
+#Write the changes to csv file
+df.to_csv(r'C:\Users\cleme\Documents\1HonoursProject\Code\dataset_clean_lemmatized_2.csv')
