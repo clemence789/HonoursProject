@@ -40,13 +40,14 @@ for page in paginator:
         #rows
         writer.writerows(data)
 
+#use paginator to collect 170000 tweets
 paginator = tweepy.Paginator(client.search_recent_tweets, 
         query = "happy OR joy OR love OR great OR amazing OR positive OR wonderful -is:retweet lang:en",
-        max_results = 100, 
+        max_results = 100, #max results per page
         tweet_fields = ['id','created_at','text', 'lang'], limit = 900)
 
+#format every tweet collected and add to csv dataset
 for page in paginator:
-
     #initialise array that will store tweets
     data = []
 
