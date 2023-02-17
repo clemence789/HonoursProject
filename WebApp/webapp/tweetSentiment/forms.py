@@ -3,7 +3,6 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
 class DataEntryForm(forms.Form):
-    
     #number of tweets input validator
     def validate_number(value):
         if value < 10:

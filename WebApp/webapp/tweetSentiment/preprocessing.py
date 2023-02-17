@@ -3,8 +3,6 @@ import emoji
 import re
 from tweetSentiment import dictionaries
 import string
-import nltk
-from nltk.tokenize import word_tokenize
 import spacy
 
 #Collect tweets from keyword
@@ -117,11 +115,6 @@ def cleanTweets(tweets):
             return(re.sub(r"\b(\w+('\w+))\b", lambda x: dictionaries.CONTRACTIONS.get(x.group(1), x.group(1)), text)) #change regex from expanding acronyms to handle apostrophe
         i = expand_contractions(i)
 
-        #remove stopwords
-        #def remove_stopwords(tweet):
-        #    return(re.sub(r"\b(\w+)\b", lambda x: dictionaries.STOPWORDS.get(x.group(1), x.group(1)), tweet))
-        #i = remove_stopwords(i)
-
         #Remove punctuation
         i = re.sub(r'[^\w\s]+', ' ', i)
         i = re.sub('_', ' ', i)
@@ -147,6 +140,7 @@ def cleanTweets(tweets):
     
     return(cleanTweets) #return pre-processed tweets
 
+#function to add part of speech tagging to negative tweets
 def tagTweets(tweets):
 
     nlp = spacy.load('en_core_web_sm') #loading the spacy engine
@@ -165,6 +159,8 @@ def tagTweets(tweets):
                 start = subtree[0].i
                 end = subtree[-1].i + 1
                 return tweets[start:end]
+    
+    #add subjects of tweets to array and return array
     tags = []
     for tweet in tweets:
         subjects = []

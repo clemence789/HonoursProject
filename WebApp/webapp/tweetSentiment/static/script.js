@@ -10,11 +10,13 @@ function filterSelection(){
   }
 }
 
+//function that shows or hides negative tweets table based on whether or not the button is pressed
 function filter(){
   document.getElementById('table_neg').style.display = 'inline-block';
   document.getElementById('neg_button').style.display = 'none';
 }
 
+//function that shows or hides negative personal tweets table based on whether or not the button is pressed
 function filterPersonal(){
   document.getElementById('table_neg_personal').style.display = 'inline-block';
   document.getElementById('neg_button_personal').style.display = 'none';

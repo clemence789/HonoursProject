@@ -90,32 +90,3 @@ print(metrics.classification_report(y_test, y_pred, target_names = ['0', '1']))
 
 
 print(metrics.confusion_matrix(y_test, y_pred))
-
-
-#repeat with Logistic regression
-#lr = LogisticRegression()
-#lr.fit(x_train_tfidf, y_train)
-
-#lr.score(x_test_tfidf, y_test)
-
-#y_pred = lr.predict(x_test_tfidf)
-
-#score_lr = metrics.accuracy_score(y_test, y_pred)
-
-#print(metrics.classification_report(y_test, y_pred, target_names = ['1', '2', '3', '4', '5']))
-#print(metrics.confusion_matrix(y_test, y_pred))
-#print(score_lr)
-
-#repeat with SVM
-#svm = SVC(kernel = 'linear')
-#svm.fit(x_train_tfidf, y_train)
-
-#svm.score(x_test_tfidf, y_test)
-
-#y_pred = svm.predict(x_test_tfidf)
-
-#score_svm = metrics.accuracy_score(y_test, y_pred)
-
-#print(metrics.classification_report(y_test, y_pred, target_names = ['1', '2', '3', '4', '5']))
-#print(metrics.confusion_matrix(y_test, y_pred))
-#print(score_svm)

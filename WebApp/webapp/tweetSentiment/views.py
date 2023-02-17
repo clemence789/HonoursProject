@@ -59,7 +59,8 @@ def entry(request):
 
                 #add the tweets to database
                 RequestedData.objects.create(tweet_text_clean = cleanTweets[i], request_number = request_number, tweet_sentiment = tweet_sentiment, tweet_text = tweet_text[i])
-
+            
+            #fetch negative tweets
             negative_tweets = RequestedData.objects.filter(request_number = request_number, tweet_sentiment = '1').values('tweet_text_clean')
 
             tweetsSub = []
@@ -67,8 +68,10 @@ def entry(request):
             for tweet in negative_tweets:
                 tweetsSub.append(tweet['tweet_text_clean'])
 
+            #get subject of negative tweets
             subject = preprocessing.tagTweets(tweetsSub)
             
+            #go through subjects to identify if they are aimed at a person or not
             for i in range(len(subject)):
                 if subject[i][0] is None:
                     subject[i][0] = "None"
