@@ -25,20 +25,19 @@ def entry(request):
             request_number = last_object.request_number + 1
 
             #get bearer token, number of tweets, keywords, and username from the form
-            bearer_token = form.cleaned_data['bearerToken']
             numberTweets = form.data['number_of_tweets']
             keywords = form.cleaned_data['keywords']
             username = form.cleaned_data['username']
 
             #perform analysis on the tweets if the user entered a username
             if keywords != '':
-                tweet_text = preprocessing.collectTweetsKeywords(bearer_token, keywords, numberTweets) #collect tweets
+                tweet_text = preprocessing.collectTweetsKeywords(keywords, numberTweets) #collect tweets
                 cleanTweets = preprocessing.cleanTweets(tweet_text) #preprocess
                 tagged_tweets = preprocessing.tagTweets(cleanTweets) #POS tagging
             
             #perform analysis on the tweets if the user entered a keyword
             elif username != '':
-                tweet_text = preprocessing.collectTweetsUsername(bearer_token, username, numberTweets) #collect tweets
+                tweet_text = preprocessing.collectTweetsUsername(username, numberTweets) #collect tweets
                 cleanTweets = preprocessing.cleanTweets(tweet_text) #preprocess
                 tagged_tweets = preprocessing.tagTweets(cleanTweets) #POS tagging
                 print(tagged_tweets)

@@ -8,7 +8,7 @@ from nltk.tokenize import word_tokenize
 import spacy
 
 #Collect tweets from keyword
-def collectTweetsKeywords(bearer_token, keywords, numberTweets):
+def collectTweetsKeywords(keywords, numberTweets):
     #clean input data
     
     #turn all text to lower case
@@ -29,7 +29,7 @@ def collectTweetsKeywords(bearer_token, keywords, numberTweets):
     numberTweets = int(numberTweets)
 
     #Access to API using OAuth
-    client = tweepy.Client(bearer_token = bearer_token, wait_on_rate_limit = True)
+    client = tweepy.Client(bearer_token = 'AAAAAAAAAAAAAAAAAAAAABI%2BkgEAAAAAXWj%2B%2Bf6FxPZ9fu9kE1wu0NPZiQM%3DauGTgGLIg4RuJ0rj54Z5I5vVFFHOOm7b4tu21dopElGbR6GhFK', wait_on_rate_limit = True)
     
     #get tweets based on keywords, in english and without retweets
     tweets = client.search_recent_tweets(
@@ -53,7 +53,7 @@ def collectTweetsKeywords(bearer_token, keywords, numberTweets):
         
 
 #Collect tweets from username
-def collectTweetsUsername(bearer_token, username, numberTweets):
+def collectTweetsUsername(username, numberTweets):
 
     user = str(username)
 
@@ -62,7 +62,7 @@ def collectTweetsUsername(bearer_token, username, numberTweets):
     numberTweets = numberTweets.replace("]", "")
     numberTweets = int(numberTweets)
 
-    client = tweepy.Client(bearer_token = bearer_token, wait_on_rate_limit = True)
+    client = tweepy.Client(bearer_token = 'AAAAAAAAAAAAAAAAAAAAABI%2BkgEAAAAAXWj%2B%2Bf6FxPZ9fu9kE1wu0NPZiQM%3DauGTgGLIg4RuJ0rj54Z5I5vVFFHOOm7b4tu21dopElGbR6GhFK', wait_on_rate_limit = True)
     
     #get user id based on username
     user = client.get_user(username = user)
