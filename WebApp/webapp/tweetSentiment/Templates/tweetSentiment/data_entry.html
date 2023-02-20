@@ -12,13 +12,15 @@
   <body>
     {{ form.non_field_errors }}
     <div class="all">
+    <p>Aim: Classify the sentiment of tweets of your choosing on a scale from very positive to very negative.</p>
     <p>Please give information on the tweets you would like to classify</p>
 
     <!-- form -->
     <form action="" method="post" class="form">
       {% csrf_token %}
       
-      <legend>How many tweets would you like to classify?</legend>
+      <legend>How many tweets would you like to collect?</legend>
+      <br>
       <!-- get the number of tweets label and field from form -->
       <div id="tweetNum" class="fill">
         {{ form.number_of_tweets.label_tag}}
@@ -27,18 +29,19 @@
       </div>
       
 
-        <legend>Filter by:</legend>
+        <legend>Collect tweets from:</legend>
     
         <!-- radio buttons for keyword or username selection, activate filterSelection function when selected to show username or keyword field-->
-        <div class="radiobutton">
-          <input type="radio" id="username" name="selection" value="username" onclick="filterSelection()">
-          <label for="username">User</label>
-        </div>
-    
-        <div class="radiobutton">
-          <input type="radio" id="keyword" name="selection" value="keyword" onclick="filterSelection()">
-          <label for="keyword">Keyword(s)</label>
-        </div>
+      <div class="radiobutton">
+        <input type="radio" id="username" name="selection" onclick="filterSelection()">
+        <label for="username">A Specific User</label>
+      </div>
+
+      <div class="radiobutton">
+        <input type="radio" id="keyword" name="selection" onclick="filterSelection()">
+        <label for="keyword">Keyword(s)</label>
+      </div>
+
 
 
       <!-- username and keyword labels and fields -->
@@ -49,10 +52,10 @@
         </div>
         <p class="error" id="error_username">{{ form.username.errors }}</p>
       
-      <div id="keyword_div">
-        {{ form.keywords.label_tag }}
-        {{ form.keywords }}
-      </div>
+        <div id="keyword_div">
+          {{ form.keywords.label_tag }}
+          {{ form.keywords }}
+        </div>
       </div>
 
       <!-- submit button -->
