@@ -1,12 +1,12 @@
 function filterSelection(){
   //function that shows or hides the keyword/username fields based on which radio button is checked
   if(document.getElementById('username').checked) {
-    document.getElementById('username_div').style.display = 'inline';
+    document.getElementById('username_div').style.display = 'inline-block';
     document.getElementById('keyword_div').style.display = 'none';
   }
   else if(document.getElementById('keyword').checked) {
     document.getElementById('username_div').style.display = 'none';
-    document.getElementById('keyword_div').style.display = 'inline';
+    document.getElementById('keyword_div').style.display = 'inline-block';
   }
 }
 
