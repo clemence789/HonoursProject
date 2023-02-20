@@ -1,8 +1,7 @@
 body {
     background-color: #1DA1F2;
     font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    color:white;  
-
+    color:white;
 }
 
 .main-heading {
@@ -13,8 +12,9 @@ body {
 }
 
 #username {
-    margin:1%;
+    margin-top:1%;
 }
+
 #username_div {
     display: none;
 }
@@ -88,5 +88,6 @@ body {
     display:inline;
     margin-top: 4%;
   }
+
 
 
