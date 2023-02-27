@@ -40,7 +40,6 @@ def entry(request):
                 tweet_text = preprocessing.collectTweetsUsername(username, numberTweets) #collect tweets
                 cleanTweets = preprocessing.cleanTweets(tweet_text) #preprocess
                 tagged_tweets = preprocessing.tagTweets(cleanTweets) #POS tagging
-                print(tagged_tweets)
 
             #go through the tweets array to apply algorithm
             for i in range(len(cleanTweets)):
@@ -103,8 +102,6 @@ def entry(request):
                     personal = "1"
                 else:
                     personal = "0"
-
-                print(negative_tweets[i])
 
                 NegativeTweets.objects.create(tweet_text = tweetsSub[i], first_subject = subject[i][0], second_subject=subject[i][1], personal_tweet = personal, request_number = request_number)
             
