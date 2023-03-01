@@ -12,7 +12,7 @@ from sklearn.metrics import make_scorer, f1_score
 
 #<!------------------------------------5 cat dataset----------------------------------------------------------->
 #read dataframe of my dataset
-#df = pd.read_csv(r'C:\Users\cleme\Documents\1HonoursProject\Code\dataset_clean_lemmatized_5cat.csv', encoding='utf-8')
+df = pd.read_csv(r'C:\Users\cleme\Documents\1HonoursProject\Code\outside_dataset\stanfordDataset.csv', encoding='utf-8')
 
 #<!------------------------------------their dataset----------------------------------------------------------->
 #read dataframe other dataset
@@ -20,7 +20,7 @@ from sklearn.metrics import make_scorer, f1_score
 
 #<!------------------------------------2 cat dataset----------------------------------------------------------->
 #read dataframe 2 cat dataset
-df = pd.read_csv(r'C:\Users\cleme\Documents\1HonoursProject\Code\dataset_clean_lemmatized_2cat.csv', encoding='utf-8')
+#df = pd.read_csv(r'C:\Users\cleme\Documents\1HonoursProject\Code\dataset_clean_lemmatized_2cat.csv', encoding='utf-8')
 
 
 #get only the score and text columns that will be used for the classification
