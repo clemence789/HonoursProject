@@ -37,8 +37,8 @@ vectoriser = TfidfVectorizer()
 x = vectoriser.fit_transform(x)
 
 #save the tfidf model
-#file_name = 'tfidf.sav'
-#pickle.dump(vectoriser, open("tfidf.sav", "wb"))
+file_name = 'tfidf_stanford.sav'
+pickle.dump(vectoriser, open("tfidf_stanford.sav", "wb"))
 
 x_train, x_test, y_train, y_test = tts(x, y, test_size = 0.2, random_state = 0)
 
@@ -49,14 +49,14 @@ lr = LogisticRegression()
 
 #<!----------------------------------------weighted----------------------------------------------------------->
 
-#f1 = cross_val_score(estimator = nb, X= x, y=y, cv=10, scoring= 'f1_weighted')
-#recall = cross_val_score(estimator = nb, X= x, y=y, cv=10, scoring= 'recall_weighted')
-#precision = cross_val_score(estimator = nb, X= x, y=y, cv=10, scoring= 'precision_weighted')
+f1 = cross_val_score(estimator = nb, X= x, y=y, cv=10, scoring= 'f1_weighted')
+recall = cross_val_score(estimator = nb, X= x, y=y, cv=10, scoring= 'recall_weighted')
+precision = cross_val_score(estimator = nb, X= x, y=y, cv=10, scoring= 'precision_weighted')
 
 #<!---------------------------------------unweighted----------------------------------------------------------->
-f1 = cross_val_score(estimator = nb, X= x, y=y, cv=10, scoring= 'f1_macro')
-recall = cross_val_score(estimator = nb, X= x, y=y, cv=10, scoring= 'recall_macro')
-precision = cross_val_score(estimator = nb, X= x, y=y, cv=10, scoring= 'precision_macro')
+#f1 = cross_val_score(estimator = nb, X= x, y=y, cv=10, scoring= 'f1_macro')
+#recall = cross_val_score(estimator = nb, X= x, y=y, cv=10, scoring= 'recall_macro')
+#precision = cross_val_score(estimator = nb, X= x, y=y, cv=10, scoring= 'precision_macro')
 
 print("recall: ", np.mean(recall))
 print("precision: ", np.mean(precision))
@@ -67,8 +67,8 @@ nb.fit(x_train, y_train)
 
 
 #save the nb model
-#filename = 'finalized_model.sav'
-#pickle.dump(nb, open(filename, 'wb'))
+filename = 'finalized_model_stanford.sav'
+pickle.dump(nb, open(filename, 'wb'))
 
 
 nb.score(x_test, y_test)
