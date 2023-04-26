@@ -10,7 +10,7 @@ def sentiment_scores(sentence):
     sentiment = ""
     sentence = str(sentence)
     sentiment_analyser = SentimentIntensityAnalyzer()
-    sentiment_dict = sentiment_analyser.polarity_scores(sentence) #addscore to each tweet
+    sentiment_dict = sentiment_analyser.polarity_scores(sentence) #add score to each tweet
     
     #give sentiment score based on lexicon score
     if sentiment_dict['compound'] < -0.60:
@@ -42,18 +42,18 @@ print("Added classification to every tweet")
 
 
 
-#def sentiment_scores(sentence):
- #   sentiment = ""
-  #  sentence = str(sentence)
-   # sentiment_analyser = SentimentIntensityAnalyzer()
-    #sentiment_dict = sentiment_analyser.polarity_scores(sentence) #addscore to each tweet
+def sentiment_scores(sentence):
+    sentiment = ""
+    sentence = str(sentence)
+    sentiment_analyser = SentimentIntensityAnalyzer()
+    sentiment_dict = sentiment_analyser.polarity_scores(sentence) #addscore to each tweet
     
     #give sentiment score based on lexicon score
-#    if sentiment_dict['compound'] < 0:
- #       sentiment = '0'
-  #  else:
-   #     sentiment = '1'
-    #return sentiment
+    if sentiment_dict['compound'] < 0:
+        sentiment = '0'
+    else:
+        sentiment = '1'
+    return sentiment
 
 #ranked 1 to 5 with 1 being very negative and 5 being very positive
 

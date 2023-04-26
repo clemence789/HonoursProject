@@ -6,7 +6,7 @@ import pandas as pd
 #open and read dataset
 df = pd.read_csv(r'C:\Users\cleme\Documents\1HonoursProject\Code\dataset_clean_2.csv', encoding='utf-8')
 
-#function to get the part of speech tage of every word
+#function to get the part of speech tag of every word
 def get_wordnet_pos(word):
     tag = nltk.pos_tag([word])[0][1][0].upper()
     tag_dict = {"J": wordnet.ADJ,

@@ -1,5 +1,3 @@
-#based on: https://stackoverflow.com/questions/19790188/expanding-english-language-contractions-in-python
-
 #dictionary of contractions
 CONTRACTIONS = { 
 "ain't": "is not",
