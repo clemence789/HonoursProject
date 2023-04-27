@@ -25,8 +25,9 @@ SECRET_KEY = 'django-insecure-fufl0(n1ts@rw-n*-(tjf*fgp-060ed-02t4fe*r3k7%_5fw#m
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['clemencergu.pythonanywhere.com', 'localhost']
+ALLOWED_HOSTS = ['clemencehonours.eu.pythonanywhere.com', 'localhost']
 
+STATIC_ROOT = "/home/clemenceHonours/webapp/tweetSentiment/static"
 
 # Application definition
 
@@ -55,7 +56,7 @@ ROOT_URLCONF = 'webapp.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['/home/clemenceHonours/webapp/tweetSentiment/Templates/tweetSentiment'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

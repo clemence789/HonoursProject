@@ -15,7 +15,7 @@ class DataEntryForm(forms.Form):
                 _('Must be a number between 10 and 100'),
                 params={'value': value},
             )
-    
+
     #username input field validator
     def validate_username(value):
         punctuation = """!"#$%&'()*+, -./:;<=>?@[\]^`{|}~"""
@@ -24,7 +24,7 @@ class DataEntryForm(forms.Form):
                 _('Please enter a valid username'),
             )
 
-    
+
     #add fields in form
     number_of_tweets = forms.IntegerField(label="Please enter a number between 10 and 100", validators=[validate_number]) #number of tweets
     keywords = forms.CharField(label = 'Keyword(s)', required=False) #keywords

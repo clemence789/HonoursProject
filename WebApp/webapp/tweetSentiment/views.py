@@ -12,7 +12,7 @@ def index(request):
 
 #view of entry page
 def entry(request):
-    
+
     #if the request is GET, show user blank form, if request is POST check data is valid
     if request.method == 'POST':
         form = DataEntryForm(request.POST)
@@ -20,36 +20,38 @@ def entry(request):
         if form.is_valid():
             #get the last object in dataset
             last_object = RequestedData.objects.last()
-            
+
             #use the last object to set the request number to +1
             request_number = last_object.request_number + 1
 
             #get bearer token, number of tweets, keywords, and username from the form
             numberTweets = form.data['number_of_tweets']
             keywords = form.cleaned_data['keywords']
-            username = form.cleaned_data['username']
+            #username = form.cleaned_data['username']
 
             #perform analysis on the tweets if the user entered a username
             if keywords != '':
                 tweet_text = preprocessing.collectTweetsKeywords(keywords, numberTweets) #collect tweets
                 cleanTweets = preprocessing.cleanTweets(tweet_text) #preprocess
                 tagged_tweets = preprocessing.tagTweets(cleanTweets) #POS tagging
-            
+
             #perform analysis on the tweets if the user entered a keyword
-            elif username != '':
-                tweet_text = preprocessing.collectTweetsUsername(username, numberTweets) #collect tweets
-                cleanTweets = preprocessing.cleanTweets(tweet_text) #preprocess
-                tagged_tweets = preprocessing.tagTweets(cleanTweets) #POS tagging
+            #elif username != '':
+                #tweet_text = preprocessing.collectTweetsUsername(username, numberTweets) #collect tweets
+                #cleanTweets = preprocessing.cleanTweets(tweet_text) #preprocess
+                #tagged_tweets = preprocessing.tagTweets(cleanTweets) #POS tagging
 
             #go through the tweets array to apply algorithm
             for i in range(len(cleanTweets)):
                 tweet_sentiment = str(ml_model.prediction_model(cleanTweets[i])) #apply model
-                
+
                 #remove the brackets from the sentiment returned
                 tweet_sentiment = tweet_sentiment.replace("[", "")
                 tweet_sentiment = tweet_sentiment.replace("]", "")
 
                 tweet_sentiment = tweet_sentiment.replace("'", "")
+                tweet_sentiment = str(tweet_sentiment)
+                tweet_sentiment = tweet_sentiment.replace(".0", "")
 
                 #remove the brackets from tweets
                 tweet_text[i] = str(tweet_text[i])
@@ -58,7 +60,7 @@ def entry(request):
 
                 #add the tweets to database
                 RequestedData.objects.create(tweet_text_clean = cleanTweets[i], request_number = request_number, tweet_sentiment = tweet_sentiment, tweet_text = tweet_text[i])
-            
+
             #fetch negative tweets
             negative_tweets = RequestedData.objects.filter(request_number = request_number, tweet_sentiment = '0').values('tweet_text_clean')
 
@@ -69,14 +71,14 @@ def entry(request):
 
             #get subject of negative tweets
             subject = preprocessing.tagTweets(tweetsSub)
-            
+
             #go through subjects to identify if they are aimed at a person or not
             for i in range(len(subject)):
                 if subject[i][0] is None:
                     subject[i][0] = "None"
                 if subject[i][1] is None:
                     subject[i][1] = "None"
-                
+
                 if "they" in subject[i][0]:
                     personal = "1"
                 elif "you" in subject[i][0]:
@@ -104,15 +106,15 @@ def entry(request):
                     personal = "0"
 
                 NegativeTweets.objects.create(tweet_text = tweetsSub[i], first_subject = subject[i][0], second_subject=subject[i][1], personal_tweet = personal, request_number = request_number)
-            
+
             #redirect to results page
             return redirect('results')
-    
+
     else:
         form = DataEntryForm()
-        
 
-    return render(request, 'tweetSentiment/data_entry.html', {'form': form})
+
+    return render(request, '/home/clemenceHonours/webapp/tweetSentiment/Templates/tweetSentiment/data_entry.html', {'form': form})
 
 
 #view of results page
@@ -123,4 +125,7 @@ def results(request):
     negative_tweets = RequestedData.objects.filter(request_number = number, tweet_sentiment = '0').values('tweet_text')
     personal_tweets = NegativeTweets.objects.filter(request_number = number, personal_tweet = '0').values('tweet_text')
     context = {'query_results': query_results, 'negative_tweets': negative_tweets, 'personal_tweets': personal_tweets} #dictionary of results
-    return render(request, 'tweetSentiment/response.html', context) #return the page with request results
+    return render(request, '/home/clemenceHonours/webapp/tweetSentiment/Templates/tweetSentiment/response.html', context) #return the page with request results
+
+
+
