@@ -1,7 +1,8 @@
 body {
-    background-color: #1DA1F2;
+    background-color:#26a7de;
     font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     color:white;
+    font-size: 24px;
 }
 
 .main-heading {
@@ -46,6 +47,7 @@ body {
 
 .form {
     width: 70%;
+    height: 70%;
     margin: 0 auto;
     background-color: #fcfcfc;
     padding: 20px 50px 40px;
@@ -90,4 +92,31 @@ body {
   }
 
 
+  svg {
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  .container {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%;
+    vertical-align: middle;
+    overflow: hidden;
+  }
 
+
+@media (max-width:1000px) {
+  .form{
+    width:100%;
+   
+    border-radius: 0px;
+  }
+  html, body {
+    overflow: hidden !important;
+    margin: 0px !important;
+  }
+
+}
