@@ -9,17 +9,26 @@
     <link rel="stylesheet" href="{% static 'style.css' %}">
   </head>
   
+  <div style="height: 40px; overflow: hidden;">
+    <svg viewBox="0 0 500 150" preserveAspectRatio="none" style="height: 40%; width: 100%; z-index:-999;">
+      <path d="M0.00,92.27 C216.83,192.92 304.30,8.39 500.00,109.03 L500.00,0.00 L0.00,0.00 Z" style="stroke: none;fill: #202084;"></path>
+    </svg>
+    
+  </div>
+
   <body>
+
     {{ form.non_field_errors }}
     <div class="all">
-    <p>Aim: Classify the sentiment of tweets of your choosing on a scale from very positive to very negative.</p>
-    <p>Please give information on the tweets you would like to classify</p>
 
     <!-- form -->
     <form action="" method="post" class="form">
       {% csrf_token %}
       
-      <legend>How many tweets would you like to collect?</legend>
+      <p><b>Aim:</b> Classify the sentiment of tweets of your choosing between positive and negative sentiments.</p>
+      
+      <p>Please give information on the tweets you would like to classify</p>
+      <legend><i>How many tweets would you like to collect?</i></legend>
       <br>
       <!-- get the number of tweets label and field from form -->
       <div id="tweetNum" class="fill">
@@ -29,20 +38,26 @@
       </div>
       
 
-        <legend>Collect tweets from:</legend>
+        <legend>Collect tweets based on:</legend>
     
-        <!-- radio buttons for keyword or username selection, activate filterSelection function when selected to show username or keyword field-->
+        <!-- radio buttons for keyword or username selection, activate filterSelection function when selected to show username or keyword field
       <div class="radiobutton">
         <input type="radio" id="username" name="selection" onclick="filterSelection()">
         <label for="username">A Specific User</label>
-      </div>
+      </div> 
 
       <div class="radiobutton">
         <input type="radio" id="keyword" name="selection" onclick="filterSelection()">
         <label for="keyword">Keyword(s)</label>
+      </div> -->
+
+      <!-- get the number of tweets label and field from form -->
+      <div id="keyword" class="fill">
+        <div id="keyword">
+          {{ form.keywords.label_tag }}
+          {{ form.keywords }}
+        </div>
       </div>
-
-
 
       <!-- username and keyword labels and fields -->
       <div class="fill">
@@ -62,6 +77,9 @@
       <input class="button" type="submit" value="Submit">
     </form>
   </div>
+
   
+
+
   </body>
 </html>
