@@ -11,12 +11,8 @@ import numpy as np
 from sklearn.metrics import make_scorer, f1_score
 
 #<!------------------------------------5 cat dataset----------------------------------------------------------->
-#read dataframe of my dataset
+#read dataframe of Stanford dataset
 #df = pd.read_csv(r'C:\Users\cleme\Documents\1HonoursProject\Code\outside_dataset\stanfordDataset.csv', encoding='utf-8')
-
-#<!------------------------------------Stanford dataset----------------------------------------------------------->
-#read dataframe other dataset
-#df = pd.read_csv(r'code\outside_dataset\stanfordDataset.csv', encoding='utf-8')
 
 #<!------------------------------------2 cat dataset----------------------------------------------------------->
 #read dataframe 2 cat dataset
