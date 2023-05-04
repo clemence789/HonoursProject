@@ -78,9 +78,4 @@ score_nb = metrics.accuracy_score(y_test, y_pred)
 
 print(metrics.classification_report(y_test, y_pred, target_names = ['0', '1']))
 
-#<!-------------------------------------------5 columns----------------------------------------------------------->
-
-#print(metrics.classification_report(y_test, y_pred, target_names = ['1', '2', '3', '4', '5']))
-
-
 print(metrics.confusion_matrix(y_test, y_pred))
